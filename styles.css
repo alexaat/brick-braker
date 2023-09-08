@@ -20,6 +20,8 @@
 #paddle{
     position: relative; 
     background-size: cover;
+    width: 0;
+    height: 0;
 }
 
 #paddle img{

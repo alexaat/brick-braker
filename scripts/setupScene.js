@@ -80,10 +80,12 @@ const initBall = () => {
     ballY = paddleY-paddleHeight-ballSize;
     ball.style.top = `${ballY}px`;
     ball.style.left = `${ballX}px`;
+    console.log('initBall');
+
 }
 
 export const addPlayer = () => {
-    alert('player added...');
+    
 }
 
 
