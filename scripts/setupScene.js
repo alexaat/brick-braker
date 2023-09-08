@@ -9,7 +9,6 @@ let boardBottom;
 
 export const setUp = () => {    
     initPlayBoard(playBoardWidth,playBoardHeight,blockSize); 
-    setPlayArea();   
     buildWalls();   
 }
 
