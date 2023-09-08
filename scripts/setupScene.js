@@ -1,58 +1,52 @@
-import {playBoardWidth, playBoardHeight, blockSize, paddleWidth, paddleHeight} from './constants.js';
+import {playBoardWidth, playBoardHeight, blockSize, paddleWidth, paddleHeight, ballSize} from 
+'./constants.js';
 
-let board;
-let boardRight;
-let boardLeft;
-let boardTop;
-let boardBottom;
+let playBoard;
+
 
 
 export const setUp = () => {    
     initPlayBoard(playBoardWidth,playBoardHeight,blockSize); 
     buildWalls();
-    initPaddle();   
+    initPaddle();
+    initBall();   
 }
 
 const initPlayBoard = (w, h, brickSize) => {
-
-    board = document.querySelector('#board');
-    boardLeft = 0;
-    boardTop = 0;
-
-
+    playBoard = document.querySelector('#board');
     const width = w*brickSize;
     const height = h*brickSize;
-    board = document.querySelector('#board');
-    board.style.width = `${width}px`;
-    board.style.height = `${height}px`;
-
-    let style = window.getComputedStyle(board);
-    boardRight = parseInt(style.width.replace('px', ''));
-    boardBottom = parseInt(style.height.replace('px', ''));
+    playBoard = document.querySelector('#board');
+    playBoard.style.width = `${width}px`;
+    playBoard.style.height = `${height}px`;
 }
 
 const buildWalls = () => {
+
+    let style = window.getComputedStyle(board);
+    const boardRight = parseInt(style.width.replace('px', ''));
+    
     for (let i = 0; i < playBoardHeight; i++) {        
-        const div = createBrick();
-        div.style.left = `${boardLeft - blockSize}px`;
-        div.style.top = `${boardTop + i * blockSize}px`;
-        board.appendChild(div);
+        const div = createBlock();
+        div.style.left = `${-blockSize}px`;
+        div.style.top = `${i * blockSize}px`;
+        playBoard.appendChild(div);
     }
     for (let i = -1; i <= playBoardWidth; i++) {
-        const div = createBrick();
-        div.style.left = `${boardLeft + i * blockSize}px`;
-        div.style.top = `${boardTop - blockSize}px`;
-        board.appendChild(div);
+        const div = createBlock();
+        div.style.left = `${i * blockSize}px`;
+        div.style.top = `${-blockSize}px`;
+        playBoard.appendChild(div);
     }
     for (let i = 0; i < playBoardHeight; i++) {
-        const div = createBrick();
-        div.style.left = `${boardLeft + boardRight}px`;
-        div.style.top = `${boardTop + i * blockSize}px`;
-        board.appendChild(div);
+        const div = createBlock();
+        div.style.left = `${boardRight}px`;
+        div.style.top = `${i * blockSize}px`;
+        playBoard.appendChild(div);
     }
 }
 
-const createBrick = () => {
+const createBlock = () => {
     let div = document.createElement('div');
     div.classList.add('wall-block');
     div.style.width = `${blockSize}px`;
@@ -69,12 +63,22 @@ const initPaddle = () => {
     const boardWidthPx =  parseInt(board.style.width.replace('px', ''));
 
     const paddleX = (boardWidthPx - paddleWidth)/2;
-    const paddleY = boardHeightPx-paddleHeight;
+    const paddleY = boardHeightPx;
 
     paddle.style.left = `${paddleX}px`;
-    paddle.style.top = `${paddleY}px`;
+    paddle.style.top = `${paddleY - paddleHeight}px`;
+}
+
+const initBall = () => {
+    const ball = document.querySelector('#ball');
+    ball.style.width = `${ballSize}px`;
+    ball.style.height = `${ballSize}px`;
+    ball.style.top = '350px';
+    ball.style.left = "90px";
 }
 
 export const addPlayer = () => {
     alert('player added...');
 }
+
+
