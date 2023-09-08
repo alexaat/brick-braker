@@ -2,8 +2,10 @@ import {playBoardWidth, playBoardHeight, blockSize, paddleWidth, paddleHeight, b
 './constants.js';
 
 let playBoard;
-
-
+let paddleX;
+let paddleY;
+let ballX;
+let ballY;
 
 export const setUp = () => {    
     initPlayBoard(playBoardWidth,playBoardHeight,blockSize); 
@@ -62,19 +64,22 @@ const initPaddle = () => {
     const boardHeightPx = parseInt(board.style.height.replace('px', ''));
     const boardWidthPx =  parseInt(board.style.width.replace('px', ''));
 
-    const paddleX = (boardWidthPx - paddleWidth)/2;
-    const paddleY = boardHeightPx;
+    paddleX = (boardWidthPx - paddleWidth)/2;
+    paddleY = boardHeightPx - paddleHeight;
 
     paddle.style.left = `${paddleX}px`;
-    paddle.style.top = `${paddleY - paddleHeight}px`;
+    paddle.style.top = `${paddleY}px`;
+
 }
 
 const initBall = () => {
     const ball = document.querySelector('#ball');
     ball.style.width = `${ballSize}px`;
     ball.style.height = `${ballSize}px`;
-    ball.style.top = '350px';
-    ball.style.left = "90px";
+    ballX = paddleX + paddleWidth/2;
+    ballY = paddleY-paddleHeight-ballSize;
+    ball.style.top = `${ballY}px`;
+    ball.style.left = `${ballX}px`;
 }
 
 export const addPlayer = () => {

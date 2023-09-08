@@ -9,20 +9,17 @@
     position: relative;
     margin: auto;
     margin-top: 100px;
-    background-color: azure; 
 }
 
 .wall-block {
     position: absolute;
     background-image: url('/images/red_block.jpg');
     background-size: cover;
-}
+    }
 
 #paddle{
-  
     position: relative; 
     background-size: cover;
-    border: 2px solid purple;
 }
 
 #paddle img{
@@ -30,9 +27,7 @@
     height: 100%;
 }
 
-
-
 #ball{
     position: relative;
-    background-image: url("images/ball.svg");   
+    background-image: url("images/ball.svg");
 }
