@@ -1,4 +1,4 @@
-import {playBoardWidth, playBoardHeight, blockSize} from './constants.js';
+import {playBoardWidth, playBoardHeight, blockSize, paddleWidth, paddleHeight} from './constants.js';
 
 let board;
 let boardRight;
@@ -9,7 +9,8 @@ let boardBottom;
 
 export const setUp = () => {    
     initPlayBoard(playBoardWidth,playBoardHeight,blockSize); 
-    buildWalls();   
+    buildWalls();
+    initPaddle();   
 }
 
 const initPlayBoard = (w, h, brickSize) => {
@@ -17,6 +18,7 @@ const initPlayBoard = (w, h, brickSize) => {
     board = document.querySelector('#board');
     boardLeft = 0;
     boardTop = 0;
+
 
     const width = w*brickSize;
     const height = h*brickSize;
@@ -56,6 +58,21 @@ const createBrick = () => {
     div.style.width = `${blockSize}px`;
     div.style.height = `${blockSize}px`;
     return div;
+}
+
+const initPaddle = () => {
+    const paddle = document.querySelector('#paddle');
+    paddle.style.width = `${paddleWidth}px`;
+    paddle.style.height = `${paddleHeight}px`;
+ 
+    const boardHeightPx = parseInt(board.style.height.replace('px', ''));
+    const boardWidthPx =  parseInt(board.style.width.replace('px', ''));
+
+    const paddleX = (boardWidthPx - paddleWidth)/2;
+    const paddleY = boardHeightPx-paddleHeight;
+
+    paddle.style.left = `${paddleX}px`;
+    paddle.style.top = `${paddleY}px`;
 }
 
 export const addPlayer = () => {
