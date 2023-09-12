@@ -18,7 +18,7 @@
     }
 
 #paddle{
-    position: relative; 
+    position: absolute; 
     background-size: cover;
     width: 0;
     height: 0;
@@ -30,6 +30,6 @@
 }
 
 #ball{
-    position: relative;
+    position: absolute;
     background-image: url("images/ball.svg");
 }

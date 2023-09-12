@@ -1,10 +1,11 @@
-import { defaultSpeedX, defaultSpeedY } from "./constants.js";
+import { ballSize, defaultSpeedX, defaultSpeedY } from "./constants.js";
+import {playBoardWidth, playBoardHeight, blockSize} from './constants.js';
+
 
 let speedX = defaultSpeedX;
 let speedY = defaultSpeedY;
 const ball = document.querySelector('#ball');
 const playBoard = document.querySelector('#board');
-const rect = playBoard.getBoundingClientRect();
 
 let ballX;
 let ballY;
@@ -24,9 +25,6 @@ export const setInitialCoordinates = (_ballX, _ballY) => {
 }
 
 
-
-
-
 const checkCollisions = (fromX, fromY, toX, toY) => {
 
     if (toX<0) {         
@@ -41,5 +39,15 @@ const checkCollisions = (fromX, fromY, toX, toY) => {
         toY=fromY;
     }
 
+    if (toX>playBoardWidth*blockSize-ballSize) {         
+        speedX = -speedX;
+        toX=fromX;
+        toY=fromY;
+    }
+    if (toY >  playBoardHeight*blockSize - ballSize){
+        speedY = -speedY;
+        toX=fromX;
+        toY=fromY;
+    }
     return [toX, toY];
 }

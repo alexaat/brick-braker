@@ -79,7 +79,7 @@ const initBall = () => {
     ball.style.width = `${ballSize}px`;
     ball.style.height = `${ballSize}px`;
     const ballX = paddleX + paddleWidth/2;
-    const ballY = paddleY-paddleHeight-ballSize;
+    const ballY = paddleY-ballSize;
     ball.style.top = `${ballY}px`;
     ball.style.left = `${ballX}px`;
     setInitialCoordinates(ballX, ballY);
