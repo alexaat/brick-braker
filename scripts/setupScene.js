@@ -1,24 +1,26 @@
 import {playBoardWidth, playBoardHeight, blockSize, paddleWidth, paddleHeight, ballSize} from 
 './constants.js';
 
+import {setInitialCoordinates} from  "./physics.js";
+
 let playBoard;
 let paddleX;
 let paddleY;
-let ballX;
-let ballY;
+//let ballX;
+//let ballY;
 
 export const setUp = () => {    
     initPlayBoard(playBoardWidth,playBoardHeight,blockSize); 
     buildWalls();
     initPaddle();
-    initBall();   
+    initBall(); 
+    initBrick();  
 }
 
 const initPlayBoard = (w, h, brickSize) => {
     playBoard = document.querySelector('#board');
     const width = w*brickSize;
     const height = h*brickSize;
-    playBoard = document.querySelector('#board');
     playBoard.style.width = `${width}px`;
     playBoard.style.height = `${height}px`;
 }
@@ -76,16 +78,25 @@ const initBall = () => {
     const ball = document.querySelector('#ball');
     ball.style.width = `${ballSize}px`;
     ball.style.height = `${ballSize}px`;
-    ballX = paddleX + paddleWidth/2;
-    ballY = paddleY-paddleHeight-ballSize;
+    const ballX = paddleX + paddleWidth/2;
+    const ballY = paddleY-paddleHeight-ballSize;
     ball.style.top = `${ballY}px`;
     ball.style.left = `${ballX}px`;
-    console.log('initBall');
+    setInitialCoordinates(ballX, ballY);
+}
 
+const initBrick = () => {
+    playBoard = document.querySelector('#board');
+    const brick = document.createElement('div');
+    brick.style.width = `60px`;
+    brick.style.height = `40px`;
+    brick.style.background = '#cccccc';
+    brick.style.top = `0px`;
+    brick.style.left = `0px`;
+    playBoard.appendChild(brick);
 }
 
 export const addPlayer = () => {
-    
 }
 
 

@@ -1,4 +1,4 @@
-import { updateBallPosition } from './ballPhysics.js';
+import { updateBallPosition } from './physics.js';
 import {setUp, addPlayer} from './setupScene.js';
 
 
@@ -13,6 +13,7 @@ const run = () => {
 
     requestAnimationFrame(run);
 }
+
 
 startGame();
 
