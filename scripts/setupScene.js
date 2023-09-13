@@ -1,7 +1,7 @@
 import {playBoardWidth, playBoardHeight, blockSize, paddleWidth, paddleHeight, ballSize} from 
 './constants.js';
 
-import {setInitialCoordinates, setRightArrow, setLeftArrow} from  "./physics.js";
+import {setInitialCoordinates, setRightArrow, setLeftArrow, updateGameState} from  "./physics.js";
 
 let playBoard;
 
@@ -104,12 +104,14 @@ const initControls = () => {
             return;
         }
         if (e.key === 'ArrowRight') {
-            setRightArrow(true);
-            //isRightDown = true;
+            setRightArrow(true);            
         }
         if (e.key === 'ArrowLeft') {
-            setLeftArrow(true);
-            //isLeftDown = true;
+            setLeftArrow(true);           
+        }
+
+        if(e.key === ' '){
+            updateGameState();
         }
     });
     
@@ -118,16 +120,16 @@ const initControls = () => {
             return;
         }
         if (e.key === 'ArrowRight') {
-            setRightArrow(false);
-           // isRightDown = false;
+            setRightArrow(false);          
         }
         if (e.key === 'ArrowLeft') {
-            setLeftArrow(false);
-            //isLeftDown = false;
+            setLeftArrow(false);            
         }
     });
 
 }
+
+
 
 export const addPlayer = () => {
 }

@@ -1,5 +1,7 @@
-import { ballSize, defaultSpeedX, defaultSpeedY, paddleWidth, paddleSpeed } from "./constants.js";
+import { ballSize, defaultSpeedX, defaultSpeedY, paddleWidth, paddleSpeed, gameStateReady, gameStatePaused, gameStateRunning } from "./constants.js";
 import {playBoardWidth, playBoardHeight, blockSize} from './constants.js';
+
+let gameState = gameStateReady;
 
 const playBoardWidthPx = playBoardWidth*blockSize;
 const playBoardHeightPx = playBoardHeight*blockSize;
@@ -9,6 +11,7 @@ let speedY = defaultSpeedY;
 const ball = document.querySelector('#ball');
 const playBoard = document.querySelector('#board');
 const paddle = document.querySelector('#paddle');
+const message = document.querySelector('#message');
 
 let isLeftDown = false;
 let isRightDown = false;
@@ -18,37 +21,23 @@ let ballY;
 let paddleX;
 let paddleY;
 
-
-
-
 Number.prototype.isBetween = function(left, right){
     return this > left && this < right;
 };
 
 export const updateScreen = () => {
-    if(isLeftDown){
-        if(paddleX+paddleSpeed > 0){
-            paddleX -= paddleSpeed;
-            paddle.style.left = `${paddleX}px`;
-        }else{
-            paddle.style.left = `0px`;
-        }
 
-    }
-    if(isRightDown){
-        if(paddleX+paddleSpeed < playBoardWidthPx - paddleWidth){
-            paddleX += paddleSpeed;
-            paddle.style.left = `${paddleX}px`;
-        }else{ 
-            paddle.style.left = `${playBoardWidthPx - paddleWidth}px`;
-        }
-
+    if(gameState === gameStateReady){
+        handlePaddleMovement();
+        ballX = paddleX + paddleWidth/2;       
+        updateBallPosition();
     }
 
-    [ballX, ballY] = checkCollisions(ballX, ballY, ballX+speedX, ballY+speedY)
-    ball.style.left = `${ballX}px`;
-    ball.style.top = `${ballY}px`;
-
+    if(gameState === gameStateRunning){        
+        handlePaddleMovement();    
+        [ballX, ballY] = checkCollisions(ballX, ballY, ballX+speedX, ballY+speedY)
+        updateBallPosition();
+    }
 }
 
 export const setInitialCoordinates = (_ballX, _ballY, _paddleX, _paddleY) => {
@@ -65,6 +54,19 @@ export const setRightArrow = (val) => {
 export const setLeftArrow = (val) => {
     isLeftDown = val;
 };
+
+export const updateGameState = () => {
+    if(gameState === gameStateReady || gameState === gameStatePaused){
+        message.textContent = '';
+        gameState = gameStateRunning;
+        return;
+    }
+    if(gameState === gameStateRunning){
+        message.textContent = 'Paused';
+        gameState = gameStatePaused;
+        return;
+    }
+}
 
 const checkCollisions = (fromX, fromY, toX, toY) => {
 
@@ -106,5 +108,30 @@ const checkCollisions = (fromX, fromY, toX, toY) => {
     }
 
     return [toX, toY];
+}
+
+const handlePaddleMovement = () => {
+            
+    if(isLeftDown){
+        if(paddleX+paddleSpeed > 0){
+            paddleX -= paddleSpeed;
+            paddle.style.left = `${paddleX}px`;
+        }else{
+            paddle.style.left = 0;
+        }
+    }
+    if(isRightDown){
+        if(paddleX+paddleSpeed < playBoardWidthPx - paddleWidth){
+            paddleX += paddleSpeed;
+            paddle.style.left = `${paddleX}px`;
+        }else{ 
+            paddle.style.left = `${playBoardWidthPx - paddleWidth}px`;
+        }
+    }  
+}
+
+const updateBallPosition = () => {
+    ball.style.left = `${ballX}px`;
+    ball.style.top = `${ballY}px`;
 }
 
