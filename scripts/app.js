@@ -1,4 +1,4 @@
-import { updateBallPosition } from './physics.js';
+import { updateScreen } from './physics.js';
 import {setUp, addPlayer} from './setupScene.js';
 
 
@@ -9,11 +9,9 @@ const startGame = () => {
 }
 
 const run = () => {
-    updateBallPosition();
-
+    updateScreen();
     requestAnimationFrame(run);
 }
-
 
 startGame();
 

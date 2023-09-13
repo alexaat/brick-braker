@@ -1,15 +1,18 @@
 import {playBoardWidth, playBoardHeight, blockSize, paddleWidth, paddleHeight, ballSize} from 
 './constants.js';
 
-import {setInitialCoordinates} from  "./physics.js";
+import {setInitialCoordinates, setRightArrow, setLeftArrow} from  "./physics.js";
 
 let playBoard;
+
+
 
 export const setUp = () => {   
     initPlayBoard(playBoardWidth,playBoardHeight,blockSize); 
     buildWalls();
     const [paddleX, paddleY] = initPaddle();
     const [ballX, ballY] = initBall(paddleX, paddleY); 
+    initControls();
     initBrick();  
     setInitialCoordinates(ballX, ballY, paddleX, paddleY);
 }
@@ -94,6 +97,38 @@ const initBrick = () => {
     brick.style.left = `0px`;
     playBoard.appendChild(brick);
 }
+
+const initControls = () => {
+    document.addEventListener("keydown", e => {
+        if (e.isComposing || e.keyCode === 229) {
+            return;
+        }
+        if (e.key === 'ArrowRight') {
+            setRightArrow(true);
+            //isRightDown = true;
+        }
+        if (e.key === 'ArrowLeft') {
+            setLeftArrow(true);
+            //isLeftDown = true;
+        }
+    });
+    
+    document.addEventListener("keyup", (e) => {
+        if (e.isComposing || e.keyCode === 229) {
+            return;
+        }
+        if (e.key === 'ArrowRight') {
+            setRightArrow(false);
+           // isRightDown = false;
+        }
+        if (e.key === 'ArrowLeft') {
+            setLeftArrow(false);
+            //isLeftDown = false;
+        }
+    });
+
+}
+
 export const addPlayer = () => {
 }
 
