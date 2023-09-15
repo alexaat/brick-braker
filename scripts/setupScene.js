@@ -3,8 +3,13 @@ import {playBoardWidth, playBoardHeight, blockSize, paddleWidth, paddleHeight, b
 
 import {setInitialCoordinates, setRightArrow, setLeftArrow, updateGameState} from  "./physics.js";
 
-let playBoard;
+import { level1 } from '../levels/level1.js';
 
+let levels = [level1];
+
+
+let playBoard;
+let bricks;
 
 
 export const setUp = () => {   
@@ -13,7 +18,8 @@ export const setUp = () => {
     const [paddleX, paddleY] = initPaddle();
     const [ballX, ballY] = initBall(paddleX, paddleY); 
     initControls();
-    initBrick();  
+    setLevel();
+    //initBrick();  
     setInitialCoordinates(ballX, ballY, paddleX, paddleY);
 }
 
@@ -87,15 +93,30 @@ const initBall = (paddleX, paddleY) => {
 
 }
 
-const initBrick = () => {
-    playBoard = document.querySelector('#board');
-    const brick = document.createElement('div');
-    brick.style.width = `60px`;
-    brick.style.height = `40px`;
-    brick.style.background = '#cccccc';
-    brick.style.top = `0px`;
-    brick.style.left = `0px`;
-    playBoard.appendChild(brick);
+const initBrick = (brick) => {
+    const div = document.createElement('div');
+    div.style.position='absolute';
+    div.style.width = `${brick.width}px`;
+    div.style.height = `${brick.height}px`;
+    div.style.backgroundImage = selectBrickImage(brick.color);
+    div.style.top = `${brick.y}px`;
+    div.style.left = `${brick.x}px`;
+    div.classList.add('brick');
+    return div;
+}
+
+const selectBrickImage = (color) => {
+    if (color === 'red') {
+        return "url('/images/red_brick.jpg')";
+    } else if (color === 'yellow') {
+        return "url('/images/yellow_brick.jpg')";
+    } else if (color === 'purple') {
+        return "url('/images/purple_brick.jpg')";
+    } else if (color === 'green') {
+        return "url('/images/green_brick.jpg')";
+    }else {
+        return "url('/images/grey_brick.jpg')";
+    }
 }
 
 const initControls = () => {
@@ -127,6 +148,67 @@ const initControls = () => {
         }
     });
 
+}
+
+export const setLevel = () => {
+
+    bricks = JSON.parse(JSON.stringify(levels[0]));
+
+    console.log(JSON.stringify(bricks))
+    bricks.forEach(brick => {
+        const b = initBrick(brick);
+        playBoard.appendChild(b);
+    });
+
+    // numberOfBlocks = 0;
+    // //Clear Bricks and Blocks
+    // let el = document.getElementsByClassName('brick');
+    // while (el.length > 0) {
+    //     el[0].parentNode.removeChild(el[0]);
+    // }
+    // el = document.getElementsByClassName('block');
+    // while (el.length > 0) {
+    //     el[0].parentNode.removeChild(el[0]);
+    // }
+    // //Bricks
+    // bricks = JSON.parse(JSON.stringify(levels[currentLevel - 1]));
+    // bricks.forEach(brick => {
+    //     let div = document.createElement('div');
+    //     div.setAttribute('id', brick.id);
+    //     div.style.position = 'absolute';
+    //     div.style.width = brick.width + 'px';
+    //     div.style.height = brick.height + 'px';
+    //     let left = parseInt(brick.x) + parseInt(boardLeft);
+    //     div.style.left = left.toString() + 'px';
+    //     let top = parseInt(brick.y) + parseInt(boardTop);
+    //     div.style.top = top.toString() + 'px';
+    //     div.style.backgroundSize = 'cover';
+    //     div.style.zIndex = 1;
+    //     if (brick.type === 'normal') {
+    //         if (brick.color === 'red') {
+    //             div.style.backgroundImage = "url('/images/red_brick.jpg')";
+    //         } else if (brick.color === 'yellow') {
+    //             div.style.backgroundImage = "url('/images/yellow_brick.jpg')";
+    //         } else if (brick.color === 'purple') {
+    //             div.style.backgroundImage = "url('/images/purple_brick.jpg')";
+    //         } else if (brick.color === 'green') {
+    //             div.style.backgroundImage = "url('/images/green_brick.jpg')";
+    //         }
+    //         else {
+    //             div.style.backgroundColor = brick.color;
+    //         }
+    //         div.classList.add('brick');
+    //     }
+    //     if (brick.type === 'block') {
+    //         numberOfBlocks++;
+    //         if (brick.color === 'blue') {
+    //             div.style.backgroundImage = "url('/images/blue_block.jpeg')";
+    //         }
+    //         div.classList.add('block');
+    //     }
+    //     board.appendChild(div);
+    // });
+    // setBridgeImage();
 }
 
 
