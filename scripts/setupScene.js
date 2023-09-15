@@ -1,16 +1,14 @@
 import {playBoardWidth, playBoardHeight, blockSize, paddleWidth, paddleHeight, ballSize} from 
 './constants.js';
 
-import {setInitialCoordinates, setRightArrow, setLeftArrow, updateGameState} from  "./physics.js";
+import {setInitialCoordinates, setRightArrow, setLeftArrow, updateGameState, setBricks} from  "./physics.js";
 
 import { level1 } from '../levels/level1.js';
 
 let levels = [level1];
 
-
 let playBoard;
 let bricks;
-
 
 export const setUp = () => {   
     initPlayBoard(playBoardWidth,playBoardHeight,blockSize); 
@@ -18,8 +16,7 @@ export const setUp = () => {
     const [paddleX, paddleY] = initPaddle();
     const [ballX, ballY] = initBall(paddleX, paddleY); 
     initControls();
-    setLevel();
-    //initBrick();  
+    setLevel(1);
     setInitialCoordinates(ballX, ballY, paddleX, paddleY);
 }
 
@@ -161,15 +158,19 @@ const initControls = () => {
 
 }
 
-export const setLevel = () => {
+export const setLevel = (level) => {
 
-    bricks = JSON.parse(JSON.stringify(levels[0]));
+    const bricksAsElements = [];
 
-    console.log(JSON.stringify(bricks))
+    bricks = JSON.parse(JSON.stringify(levels[level-1]));
+    
     bricks.forEach(brick => {
         const b = initBrick(brick);
+        bricksAsElements.push(b);
         playBoard.appendChild(b);
     });
+
+    setBricks(bricksAsElements);
 
     // numberOfBlocks = 0;
     // //Clear Bricks and Blocks
@@ -221,8 +222,6 @@ export const setLevel = () => {
     // });
     // setBridgeImage();
 }
-
-
 
 export const addPlayer = () => {
 }

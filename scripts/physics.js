@@ -21,6 +21,8 @@ let ballY;
 let paddleX;
 let paddleY;
 
+let bricksAsElements;
+
 Number.prototype.isBetween = function(left, right){
     return this > left && this < right;
 };
@@ -55,6 +57,11 @@ export const setLeftArrow = (val) => {
     isLeftDown = val;
 };
 
+export const setBricks = (val) => {
+    console.log(val)
+    bricksAsElements = val;
+}
+
 export const updateGameState = () => {
     if(gameState === gameStateReady || gameState === gameStatePaused){
         message.textContent = '';
@@ -70,6 +77,8 @@ export const updateGameState = () => {
 
 const checkCollisions = (fromX, fromY, toX, toY) => {
 
+    //Middle points
+    const [leftX, leftY,topX, topY,rightX,rightY,bottomX,bottomY] = calculateMiddlePoints(toX, toY);
 
 
     //Walls collisions
@@ -98,7 +107,6 @@ const checkCollisions = (fromX, fromY, toX, toY) => {
         return [toX, toY];
     }
 
-
     //Paddle Collisions
     if(toX.isBetween(paddleX, paddleX+paddleWidth) && toY>paddleY-ballSize){
         toX=fromX;
@@ -107,7 +115,81 @@ const checkCollisions = (fromX, fromY, toX, toY) => {
         return [toX, toY];
     }
 
+
+    //Brick collision
+ 
+     for(let i = 0; i<bricksAsElements.length; i++){
+         const collision = isCollision(ball, bricksAsElements[i]);        
+         if (collision){
+            console.log(collision);
+             toX=fromX;
+            toY=fromY;
+    //         handleCollision(collision);
+             break;
+         }
+     }
+
     return [toX, toY];
+}
+
+/*
+const handleCollision = (collision) => {
+    console.log(collision)
+    switch(collision){
+        case 'bottom' :
+            speedY = -speedY;
+    }
+}
+*/
+const isCollision = (ball, obj) => {
+    let rectBall = ball.getBoundingClientRect();
+    let rectObj = obj.getBoundingClientRect();
+    let b_left = rectBall.left;
+    let b_right = rectBall.right;
+    let b_top = rectBall.top;
+    let b_bottom = rectBall.bottom;
+    let o_left = rectObj.left;
+    let o_right = rectObj.right;
+    let o_top = rectObj.top;
+    let o_bottom = rectObj.bottom;
+    //Bottom
+    if(b_top < o_bottom && b_top > o_top && b_left > o_left && b_left < o_right){
+        return 'bottom';
+    }
+    //Top
+    if(b_bottom > o_top && b_bottom <o_bottom && b_left > o_left && b_left < o_right){
+        return 'top';
+    }
+    //Left
+    if(b_right>o_right && b_right < o_left && b_top > o_top && b_bottom<o_bottom){
+        return 'left';
+    }
+    //Right
+    if(b_top>o_top && b_bottom<o_bottom && b_left<o_right && b_left>o_left){
+        return 'right'
+    }
+    //topLeft
+    if(b_bottom>o_top && b_top < o_top && b_right>o_left && b_left < o_left){
+        return 'topLeft'
+    }
+    //topRight
+    if(b_left < o_right && b_right>o_right && b_bottom>o_top && b_top < o_top){
+        return 'topRight'
+    }
+    //bottomLeft
+    if(b_top<o_bottom && b_bottom > o_bottom && b_right>o_left && b_left < o_left){
+        return 'bottomLeft'
+    }
+    //bottomRight
+    if(b_top < o_bottom && b_bottom> o_bottom && b_left < o_right && b_right > o_right){
+        return 'bottomRight'
+    }
+    return '';
+}
+
+
+const calculateMiddlePoints = (toX, toY) => {
+    return [toX, toY + ballSize/2, toX + ballSize/2, toY,toX + ballSize,toY+ballSize/2,toX + ballSize/2, toY + ballSize];
 }
 
 const handlePaddleMovement = () => {
