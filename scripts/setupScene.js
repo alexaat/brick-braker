@@ -98,24 +98,35 @@ const initBrick = (brick) => {
     div.style.position='absolute';
     div.style.width = `${brick.width}px`;
     div.style.height = `${brick.height}px`;
-    div.style.backgroundImage = selectBrickImage(brick.color);
+    div.style.backgroundImage = selectBrickImage(brick);
     div.style.top = `${brick.y}px`;
     div.style.left = `${brick.x}px`;
     div.classList.add('brick');
     return div;
 }
 
-const selectBrickImage = (color) => {
-    if (color === 'red') {
-        return "url('/images/red_brick.jpg')";
-    } else if (color === 'yellow') {
-        return "url('/images/yellow_brick.jpg')";
-    } else if (color === 'purple') {
-        return "url('/images/purple_brick.jpg')";
-    } else if (color === 'green') {
-        return "url('/images/green_brick.jpg')";
-    }else {
-        return "url('/images/grey_brick.jpg')";
+const selectBrickImage = (brick) => {
+    if(brick.type === 'normal'){
+        switch(brick.color){
+            case 'red':
+                return "url('/images/red_brick.jpg')";
+            case 'yellow':
+                return "url('/images/yellow_brick.jpg')";
+            case 'purple':
+                return "url('/images/purple_brick.jpg')";
+            case 'green':
+                return "url('/images/green_brick.jpg')";
+            default :
+                return "url('/images/grey_brick.jpg')";
+        }
+    }
+    if(brick.type === 'block'){
+        switch(brick.color){
+            case 'blue':
+                return "url('/images/blue_block.jpeg')";
+            default :
+                return "url('/images/grey_block.jpeg')";
+        }
     }
 }
 
