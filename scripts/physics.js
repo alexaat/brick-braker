@@ -1,4 +1,4 @@
-import { ballSize, defaultSpeedX, defaultSpeedY, paddleWidth, paddleSpeed, gameStateReady, gameStatePaused, gameStateRunning } from "./constants.js";
+import { ballSize, defaultSpeedX, defaultSpeedY, paddleWidth, paddleSpeed, gameStateReady, gameStatePaused, gameStateRunning, paddleHeight } from "./constants.js";
 import {playBoardWidth, playBoardHeight, blockSize} from './constants.js';
 
 let gameState = gameStateReady;
@@ -81,6 +81,18 @@ const checkCollisions = () => {
     ballX+=speedX;
     ballY+=speedY;
 
+
+    //Middle points of ball
+    const topX = ballX+ballSize/2;
+    const topY = ballY;
+    const bottomX = ballX + ballSize/2;
+    const bottomY = ballY + ballSize;
+    const rightX = ballX + ballSize;
+    const rightY = ballY+ballSize/2;
+    const leftX = ballX;
+    const leftY = ballY+ballSize/2;
+
+
     //Walls collisions
     if(ballX< 0){
         ballX -=speedX;
@@ -100,15 +112,15 @@ const checkCollisions = () => {
         speedX = -speedX;
         return;
     }
-    if (ballY >  playBoardHeight*blockSize - ballSize){
-        ballX -=speedX;
-        ballY -=speedY;
-        speedY = -speedY;
+    if (ballY > playBoardHeight*blockSize - ballSize){
+        // ballX -=speedX;
+        // ballY -=speedY;
+        // speedY = -speedY;
+        ball.remove();
         return;
     }
 
-    //Paddle collisions
-    
+    //Paddle collisions    
     //Puddle top
     if(ballX.isBetween(paddleX, paddleX+paddleWidth) && ballY>paddleY-ballSize){
         ballX -=speedX;
@@ -116,22 +128,51 @@ const checkCollisions = () => {
         speedY = -speedY;
         return;
     }
+    //Paddle Left-Top
+    if(rightX.isBetween(paddleX, paddleX+paddleWidth) && rightY.isBetween(paddleY, paddleY+paddleHeight/2)){
+        ballX -=speedX;
+        ballY -=speedY;
+        if(speedX>0){
+            speedX = -speedX;
+        }
+        speedY = -speedY;
+       
+        return;
+    }
     
+    //Paddle Right-Top
+    if(leftX.isBetween(paddleX, paddleX+paddleWidth) && leftY.isBetween(paddleY, paddleY+paddleHeight/2)){
+        ballX -=speedX;
+        ballY -=speedY;
+        speedY = -speedY;
+        if(speedX < 0){
+            speedX = -speedX;
+        }
+        return;
+    }
+
+    //Paddle Left-Bottom
+    if(rightX.isBetween(paddleX, paddleX+paddleWidth) && rightY.isBetween( paddleY+paddleHeight/2, paddleY+paddleHeight)){
+        ballX -=speedX;
+        ballY -=speedY;
+        speedY = -speedY;
+        speedX = -speedX;
+        return;
+    }
+
+    //Paddle Right-Bottom
+    if(leftX.isBetween(paddleX, paddleX+paddleWidth) && leftY.isBetween(paddleY+paddleHeight/2, paddleY+paddleHeight)){
+        ballX -=speedX;
+        ballY -=speedY;
+        speedY = -speedY;
+        speedX = -speedX;
+        return;
+    }
+
+
     //Brick collisions
     for(let i = 0; i<bricksAsElements.length; i++){
         const brick = bricksAsElements[i];
-      
-
-        //Middle points of ball
-        const topX = ballX+ballSize/2;
-        const topY = ballY;
-        const bottomX = ballX + ballSize/2;
-        const bottomY = ballY + ballSize;
-        const rightX = ballX + ballSize;
-        const rightY = ballY+ballSize/2;
-        const leftX = ballX;
-        const leftY = ballY+ballSize/2;
-
 
         const brickLeft = brick.offsetLeft;
         const brickTop = brick.offsetTop;
