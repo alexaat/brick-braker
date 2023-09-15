@@ -78,7 +78,7 @@ export const updateGameState = () => {
 const checkCollisions = (fromX, fromY, toX, toY) => {
 
     //Middle points
-    const [leftX, leftY,topX, topY,rightX,rightY,bottomX,bottomY] = calculateMiddlePoints(toX, toY);
+    const [l, t, r, b] = calculateMiddlePoints(toX, toY);
 
 
     //Walls collisions
@@ -117,30 +117,55 @@ const checkCollisions = (fromX, fromY, toX, toY) => {
 
 
     //Brick collision
- 
-     for(let i = 0; i<bricksAsElements.length; i++){
+    
+    ball.style.left = `${toX}px`;
+    ball.style.top = `${toY}px`;
+    for(let i = 0; i<bricksAsElements.length; i++){
          const collision = isCollision(ball, bricksAsElements[i]);        
          if (collision){
             console.log(collision);
-             toX=fromX;
+            toX=fromX;
             toY=fromY;
-    //         handleCollision(collision);
-             break;
+            ball.style.left = `${fromX}px`;
+            ball.style.top = `${fromY}px`;
+            handleCollision(collision);
+            break;
          }
      }
 
     return [toX, toY];
 }
 
-/*
+
 const handleCollision = (collision) => {
     console.log(collision)
     switch(collision){
         case 'bottom' :
             speedY = -speedY;
+            break;
+            case 'left' :
+                speedX = -speedX;
+            break;
+            case 'top' :
+                speedY = -speedY;
+            break;
+            case 'right' :
+                speedX = -speedX;
+            break;
+            case 'bottomLeft' :
+                speedY = -speedY;
+            break;
+            case 'topLeft':
+                speedX = -speedX;
+                break;
+
+
+            
     }
 }
-*/
+
+
+
 const isCollision = (ball, obj) => {
     let rectBall = ball.getBoundingClientRect();
     let rectObj = obj.getBoundingClientRect();
@@ -187,9 +212,8 @@ const isCollision = (ball, obj) => {
     return '';
 }
 
-
 const calculateMiddlePoints = (toX, toY) => {
-    return [toX, toY + ballSize/2, toX + ballSize/2, toY,toX + ballSize,toY+ballSize/2,toX + ballSize/2, toY + ballSize];
+    return [{x: toX, y: toY + ballSize/2}, {x: toX + ballSize/2, y: toY},{x: toX + ballSize, y: toY+ballSize/2},{x: toX + ballSize/2, y: toY + ballSize}];
 }
 
 const handlePaddleMovement = () => {
