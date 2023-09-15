@@ -118,6 +118,7 @@ const checkCollisions = () => {
         // speedY = -speedY;
         ball.remove();
         return;
+        
     }
 
     //Paddle collisions    
