@@ -47,8 +47,6 @@ export const updateScreen = () => {
             moveBall();
             updateBallPosition();  
         }
-
-
     }
 }
 
