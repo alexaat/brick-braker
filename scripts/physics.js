@@ -36,10 +36,19 @@ export const updateScreen = () => {
     }
 
     if(gameState === gameStateRunning){        
+        /*
         handlePaddleMovement();    
-        //[ballX, ballY] = checkCollisions(ballX, ballY, ballX+speedX, ballY+speedY)
         checkCollisions();
         updateBallPosition();
+        */
+        handlePaddleMovement();  
+        checkCollisionsDelayed();
+        if(gameState === gameStateRunning){
+            moveBall();
+            updateBallPosition();  
+        }
+
+
     }
 }
 
@@ -74,6 +83,148 @@ export const updateGameState = () => {
         gameState = gameStatePaused;
         return;
     }
+}
+
+const checkCollisionsDelayed = () => {
+
+    //Middle points of ball
+    const topX = ballX+ballSize/2;
+    const topY = ballY;
+    const bottomX = ballX + ballSize/2;
+    const bottomY = ballY + ballSize;
+    const rightX = ballX + ballSize;
+    const rightY = ballY+ballSize/2;
+    const leftX = ballX;
+    const leftY = ballY+ballSize/2;
+
+
+    //Walls collisions
+    if(ballX< 0){
+        ballX -=speedX;
+        ballY -=speedY;
+        speedX = -speedX;
+        return;
+    }
+    if(ballY<0){
+        ballX -=speedX;
+        ballY -=speedY;
+        speedY = -speedY;
+        return;
+    }
+    if (ballX>playBoardWidth*blockSize-ballSize) {   
+        ballX -=speedX;
+        ballY -=speedY;
+        speedX = -speedX;
+        return;
+    }
+    if (ballY > playBoardHeight*blockSize - ballSize){
+        // ballX -=speedX;
+        // ballY -=speedY;
+        // speedY = -speedY;
+        ballIsOutHandler();
+        //ball.remove();
+        return;
+        
+    }
+
+    //Paddle collisions    
+    //Puddle top
+    if(ballX.isBetween(paddleX, paddleX+paddleWidth) && ballY>paddleY-ballSize){
+        ballX -=speedX;
+        ballY -=speedY;
+        speedY = -speedY;
+        return;
+    }
+    //Paddle Left-Top
+    if(rightX.isBetween(paddleX, paddleX+paddleWidth) && rightY.isBetween(paddleY, paddleY+paddleHeight/2)){
+        ballX -=speedX;
+        ballY -=speedY;
+        if(speedX>0){
+            speedX = -speedX;
+        }
+        speedY = -speedY;
+       
+        return;
+    }
+    
+    //Paddle Right-Top
+    if(leftX.isBetween(paddleX, paddleX+paddleWidth) && leftY.isBetween(paddleY, paddleY+paddleHeight/2)){
+        ballX -=speedX;
+        ballY -=speedY;
+        speedY = -speedY;
+        if(speedX < 0){
+            speedX = -speedX;
+        }
+        return;
+    }
+
+    //Paddle Left-Bottom
+    if(rightX.isBetween(paddleX, paddleX+paddleWidth) && rightY.isBetween( paddleY+paddleHeight/2, paddleY+paddleHeight)){
+        ballX -=speedX;
+        ballY -=speedY;
+        speedY = -speedY;
+        speedX = -speedX;
+        return;
+    }
+
+    //Paddle Right-Bottom
+    if(leftX.isBetween(paddleX, paddleX+paddleWidth) && leftY.isBetween(paddleY+paddleHeight/2, paddleY+paddleHeight)){
+        ballX -=speedX;
+        ballY -=speedY;
+        speedY = -speedY;
+        speedX = -speedX;
+        return;
+    }
+
+
+    //Brick collisions
+    for(let i = 0; i<bricksAsElements.length; i++){
+        const brick = bricksAsElements[i];
+
+        const brickLeft = brick.offsetLeft;
+        const brickTop = brick.offsetTop;
+        const brickRight = brickLeft + brick.offsetWidth;
+        const brickBottom = brickTop + brick.offsetHeight;
+       
+        //Bottom hit
+        if(topX.isBetween(brickLeft, brickRight) && topY.isBetween(brickTop, brickBottom)){
+            ballX -=speedX;
+            ballY -=speedY;
+            speedY = -speedY;
+            return;
+        }
+
+        //Top hit
+        if(bottomX.isBetween(brickLeft, brickRight) && bottomY.isBetween(brickTop, brickBottom)){
+            ballX -=speedX;
+            ballY -=speedY;
+            speedY = -speedY;
+            return;
+        }
+
+        //Left hit
+        if(rightX.isBetween(brickLeft, brickRight) && rightY.isBetween(brickTop, brickBottom)){
+            ballX -=speedX;
+            ballY -=speedY;
+            speedX = -speedX;
+            return;
+        }
+
+        //Right hit
+        if(leftX.isBetween(brickLeft, brickRight) && leftY.isBetween(brickTop, brickBottom)){
+            ballX -=speedX;
+            ballY -=speedY;
+            speedX = -speedX;
+            return;
+        }
+
+    }
+
+}
+
+const moveBall = () => {
+    ballX+=speedX;
+    ballY+=speedY;
 }
 
 const checkCollisions = () => {
@@ -214,10 +365,19 @@ const checkCollisions = () => {
 
     }
 
+}
 
-
-
-
+const ballIsOutHandler = () => {
+    gameState = gameStateReady;
+    const boardWidthPx =  parseInt(board.style.width.replace('px', ''));
+    const paddleX = (boardWidthPx - paddleWidth)/2;
+    ballX = paddleX + paddleWidth/2;
+    ballY = paddleY-ballSize;
+    paddle.style.left = `${paddleX}px`;
+    paddle.style.top = `${paddleY}px`;
+    ball.style.top = `${ballY}px`;
+    ball.style.left = `${ballX}px`;   
+    
 }
 
 /*
