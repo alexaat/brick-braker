@@ -98,6 +98,8 @@ const initBrick = (brick) => {
     div.style.backgroundImage = selectBrickImage(brick);
     div.style.top = `${brick.y}px`;
     div.style.left = `${brick.x}px`;
+    div.dataset.type = brick.type;
+    div.dataset.id = brick.id;
     div.classList.add('brick');
     return div;
 }
@@ -160,7 +162,7 @@ const initControls = () => {
 
 export const setLevel = (level) => {
 
-    const bricksAsElements = [];
+    let bricksAsElements = [];
 
     bricks = JSON.parse(JSON.stringify(levels[level-1]));
     
