@@ -1,5 +1,6 @@
 import { ballSize, defaultSpeedX, defaultSpeedY, paddleWidth, paddleSpeed, gameStateReady, gameStatePaused, gameStateRunning, paddleHeight } from "./constants.js";
 import {playBoardWidth, playBoardHeight, blockSize} from './constants.js';
+import { updateLives, updateScore } from "./ui.js";
 
 let gameState = gameStateReady;
 
@@ -342,10 +343,8 @@ const checkCollisions = () => {
 
     //Brick collisions
     for(let i = 0; i<bricksAsElements.length; i++){
-        console.log(bricksAsElements.length)
-
+        console.log(bricksAsElements.length);
         const brick = bricksAsElements[i];
-
         const brickLeft = brick.offsetLeft;
         const brickTop = brick.offsetTop;
         const brickRight = brickLeft + brick.offsetWidth;
@@ -413,7 +412,9 @@ const ballIsOutHandler = () => {
     speedX = defaultSpeedX;
     speedY = defaultSpeedY;
     
-    gameState = gameStateReady;  
+    gameState = gameStateReady;
+    
+    updateLives();
     
 }
 
@@ -421,6 +422,7 @@ const handleBrickCollisionEffect = (brick) => {
     if(brick.dataset.type === 'normal'){
         bricksAsElements = bricksAsElements.filter(b => b.dataset.id != brick.dataset.id);
         brick.remove();
+        updateScore();
     }
 }
 
@@ -588,4 +590,6 @@ const updateBallPosition = () => {
     ball.style.left = `${ballX}px`;
     ball.style.top = `${ballY}px`;
 }
+
+
 
