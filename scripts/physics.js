@@ -1,6 +1,6 @@
-import { ballSize, defaultSpeedX, defaultSpeedY, paddleWidth, paddleSpeed, gameStateReady, gameStatePaused, gameStateRunning, paddleHeight } from "./constants.js";
+import { ballSize, defaultSpeedX, defaultSpeedY, paddleWidth, paddleSpeed, gameStateReady, gameStatePaused, gameStateRunning, paddleHeight, gameStateGameOver } from "./constants.js";
 import {playBoardWidth, playBoardHeight, blockSize} from './constants.js';
-import { updateLives, updateScore } from "./ui.js";
+import { updateLives, updateScore, setMessage } from "./ui.js";
 
 let gameState = gameStateReady;
 
@@ -12,7 +12,6 @@ let speedY = defaultSpeedY;
 const ball = document.querySelector('#ball');
 const playBoard = document.querySelector('#board');
 const paddle = document.querySelector('#paddle');
-const message = document.querySelector('#message');
 
 let isLeftDown = false;
 let isRightDown = false;
@@ -36,19 +35,13 @@ export const updateScreen = () => {
         updateBallPosition();
     }
 
-    if(gameState === gameStateRunning){        
-        
+    if(gameState === gameStateRunning){         
         handlePaddleMovement();    
         checkCollisions();
         updateBallPosition();
-    
-       /*
-        handlePaddleMovement();  
-        checkCollisionsDelayed();
-        if(gameState === gameStateRunning){
-            moveBall();
-            updateBallPosition();  
-        */
+    }
+    if(gameState === gameStateGameOver){
+        ball.remove();
     }
 }
 
@@ -73,14 +66,17 @@ export const setBricks = (val) => {
 
 export const updateGameState = () => {
     if(gameState === gameStateReady || gameState === gameStatePaused){
-        message.textContent = '';
+        setMessage('');
         gameState = gameStateRunning;
         return;
     }
     if(gameState === gameStateRunning){
-        message.textContent = 'Paused';
+        setMessage('Paused');
         gameState = gameStatePaused;
         return;
+    }
+    if(gameState === gameStateGameOver){
+        setMessage('Game Over');    
     }
 }
 
@@ -414,7 +410,10 @@ const ballIsOutHandler = () => {
     
     gameState = gameStateReady;
     
-    updateLives();
+    if(!updateLives()){
+        gameState = gameStateGameOver;
+        updateGameState();
+    }
     
 }
 

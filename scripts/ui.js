@@ -1,6 +1,8 @@
 const scoreLable = document.querySelector('#score');
 const levelLable = document.querySelector('#level');
-const paddle = document.querySelector('#paddle');
+const paddle = document.querySelector('#paddle img');
+const message = document.querySelector('#message');
+
 
 let score = 0;
 let level = 0;
@@ -34,16 +36,19 @@ export const updateLives = (_lives) => {
 
     switch(lives){
         case 3:
-            paddle.style.backgroundImage = "url('/images/paddle_2.jpg')";
+            paddle.src='./images/paddle_2.jpg';          
             break;
         case 2:
-            paddle.style.backgroundImage = "url('/images/paddle_1.jpg')";
+            paddle.src='./images/paddle_1.jpg';            
             break;
         case 1:
-            paddle.style.backgroundImage = "url('/images/paddle_0.jpg')";
+            paddle.src='./images/paddle_0.jpg';           
             break;
     }
     return lives>0;
+}
 
+export const setMessage = (val) => {
+    message.textContent = val;
 }
 
