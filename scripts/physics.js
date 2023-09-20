@@ -76,7 +76,7 @@ export const updateGameState = () => {
         return;
     }
     if(gameState === gameStateGameOver){
-        setMessage('Game Over');    
+        setMessage('Game Over.');    
     }
 }
 
