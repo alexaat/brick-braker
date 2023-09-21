@@ -43,7 +43,8 @@
     font-weight: 700;
     color: #aaaaaa;
     font-family:'Courier New', Courier, monospace;
-    background-color: #222222;
+    background-color: #222222dd;
+    z-index: 1;
 }
 .brick{
     background-size: cover;

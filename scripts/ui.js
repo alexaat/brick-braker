@@ -9,7 +9,7 @@ let level = 0;
 let lives = 3;
 
 export const updateScore = (_score) => {
-    if(_score){
+    if(_score != undefined){
         score = _score;
     }else{
         score++;
@@ -17,9 +17,8 @@ export const updateScore = (_score) => {
     scoreLable.textContent = `Score: ${score}`;
 }
 
-
 export const updateLevel = (_level) => {
-    if(_level){
+    if(_level != undefined){
         level = _level;
     }else{
         level++;
@@ -28,7 +27,7 @@ export const updateLevel = (_level) => {
 }
 
 export const updateLives = (_lives) => {
-    if(_lives){
+    if(_lives != undefined){
         lives = _lives
     }else{
         lives --;

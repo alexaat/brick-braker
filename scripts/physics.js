@@ -1,6 +1,7 @@
 import { ballSize, defaultSpeedX, defaultSpeedY, paddleWidth, paddleSpeed, gameStateReady, gameStatePaused, gameStateRunning, paddleHeight, gameStateGameOver } from "./constants.js";
 import {playBoardWidth, playBoardHeight, blockSize} from './constants.js';
-import { updateLives, updateScore, setMessage } from "./ui.js";
+import { setLevel } from "./setupScene.js";
+import { updateLives, updateScore, setMessage, updateLevel } from "./ui.js";
 
 let gameState = gameStateReady;
 
@@ -41,7 +42,7 @@ export const updateScreen = () => {
         updateBallPosition();
     }
     if(gameState === gameStateGameOver){
-        ball.remove();
+        ball.style.display = 'none';
     }
 }
 
@@ -64,21 +65,21 @@ export const setBricks = (val) => {
     bricksAsElements = val;
 }
 
-export const updateGameState = () => {
-    if(gameState === gameStateReady || gameState === gameStatePaused){
-        setMessage('');
-        gameState = gameStateRunning;
-        return;
-    }
-    if(gameState === gameStateRunning){
-        setMessage('Paused');
-        gameState = gameStatePaused;
-        return;
-    }
-    if(gameState === gameStateGameOver){
-        setMessage('Game Over.');    
-    }
-}
+// export const updateGameState = () => {
+//     if(gameState === gameStateReady || gameState === gameStatePaused){
+//         setMessage('');
+//         gameState = gameStateRunning;
+//         return;
+//     }
+//     if(gameState === gameStateRunning){
+//         setMessage('Paused');
+//         gameState = gameStatePaused;
+//         return;
+//     }
+//     if(gameState === gameStateGameOver){
+//         setMessage('Game Over.');    
+//     }
+// }
 
 const checkCollisionsDelayed = () => {
 
@@ -411,8 +412,7 @@ const ballIsOutHandler = () => {
     gameState = gameStateReady;
     
     if(!updateLives()){
-        gameState = gameStateGameOver;
-        updateGameState();
+        setGameState(gameStateGameOver);
     }
     
 }
@@ -424,6 +424,55 @@ const handleBrickCollisionEffect = (brick) => {
         updateScore();
     }
 }
+
+export const handleKeyPress = (key) => {
+    if(key === ' '){
+        if(gameState === gameStateReady || gameState === gameStatePaused){
+            setGameState(gameStateRunning);
+            return;
+        }
+        if(gameState === gameStateRunning){
+            setGameState(gameStatePaused);
+            return;
+        }
+        if(gameState === gameStateGameOver){
+            resetGame();
+            setGameState(gameStateReady);
+            return;
+        }
+    }
+    if(key === 'Escape'){
+
+    }
+}
+
+const setGameState = (state) => {
+    switch(state){
+        case gameStateRunning:
+             gameState = gameStateRunning;
+             setMessage('');
+        break;
+        case gameStatePaused:
+             gameState = gameStatePaused;
+             setMessage('Paused');
+        break;
+        case gameStateGameOver:
+             gameState = gameStateGameOver;
+             setMessage('Game Over. Press SPACE to paly again');    
+        break;
+        case gameStateReady:
+            gameState = gameStateReady;
+            setMessage('Press SPACE to start');    
+       break;
+    }
+}
+
+const  resetGame = () => { 
+   ball.style.display = 'block';   
+   updateLives(3);
+   updateLevel(1);
+   updateScore(0);    
+};
 
 /*
 const checkCollisions = (fromX, fromY, toX, toY) => {

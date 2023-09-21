@@ -1,7 +1,7 @@
 import {playBoardWidth, playBoardHeight, blockSize, paddleWidth, paddleHeight, ballSize} from 
 './constants.js';
 
-import {setInitialCoordinates, setRightArrow, setLeftArrow, updateGameState, setBricks} from  "./physics.js";
+import {setInitialCoordinates, setRightArrow, setLeftArrow, handleKeyPress, setBricks} from  "./physics.js";
 
 import { level1 } from '../levels/level1.js';
 
@@ -142,7 +142,11 @@ const initControls = () => {
         }
 
         if(e.key === ' '){
-            updateGameState();
+            //updateGameState();
+            handleKeyPress(' ');            
+        }
+        if(e.key === 'Escape'){
+            handleKeyPress('Escape');   
         }
     });
     
