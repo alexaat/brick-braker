@@ -1,7 +1,10 @@
 import { ballSize, defaultSpeedX, defaultSpeedY, paddleWidth, paddleSpeed, gameStateReady, gameStatePaused, gameStateRunning, paddleHeight, gameStateGameOver } from "./constants.js";
 import {playBoardWidth, playBoardHeight, blockSize} from './constants.js';
 import { setLevel } from "./setupScene.js";
-import { updateLives, updateScore, setMessage, updateLevel } from "./ui.js";
+import { updateLives, updateScore, setMessage, updateLevel, placeBricks } from "./ui.js";
+import { level1 } from '../levels/level1.js';
+
+let levels = [level1];
 
 let gameState = gameStateReady;
 
@@ -471,7 +474,14 @@ const  resetGame = () => {
    ball.style.display = 'block';   
    updateLives(3);
    updateLevel(1);
-   updateScore(0);    
+   updateScore(0);  
+
+
+   const bricks = JSON.parse(JSON.stringify(levels[0]));
+   placeBricks(bricks);
+   
+
+   
 };
 
 /*
