@@ -13,7 +13,6 @@
 
 .wall-block {
     position: absolute;
-    background-image: url('/images/red_block.jpg');
     background-size: cover;
     }
 
