@@ -11,10 +11,9 @@
     margin-top: 80px;
 }
 
-.wall-block {
+.block {
     position: absolute;
     background-size: cover;
-
     }
 
 #paddle{

@@ -1,202 +1,201 @@
 export const level1 = [   
-    { 
-        
+    {         
         id: 1,
-        x: 0,
-        y: 0,
+        left: 0,
+        top: 0,
         width: 50,
         height: 15,
         color: 'purple',
-        type: 'normal'
+        type: 'purple_brick'
      },
      
     { 
         id: 2,
-        x: 50,
-        y: 0,
+        left: 50,
+        top: 0,
         width: 50,
         height: 15,
         color: 'purple',
-        type: 'normal'
+        type: 'purple_brick'
       },
     { 
         id: 3,
-        x: 100,
-        y: 0,
+        left: 100,
+        top: 0,
         width: 50,
         height: 15,
         color: 'purple',
-        type: 'normal'
+        type: 'purple_brick'
     },
     { 
         id: 4,
-        x: 150,
-        y: 0,
+        left: 150,
+        top: 0,
         width: 50,
         height: 15,
         color: 'purple',
-        type: 'normal'
+        type: 'purple_brick'
     },
     { 
         id: 5,
-        x: 200,
-        y: 0,
+        left: 200,
+        top: 0,
         width: 50,
         height: 15,
         color: 'purple',
-        type: 'normal'
+        type: 'purple_brick'
     },
     { 
         id: 6,
-        x: 250,
-        y: 0,
+        left: 250,
+        top: 0,
         width: 50,
         height: 15,
         color: 'purple',
-        type: 'normal'
+        type: 'purple_brick'
     },
     { 
         id: 7,
-        x: 0,
-        y: 15,
+        left: 0,
+        top: 15,
         width: 50,
         height: 15,
         color: 'red',
-        type: 'normal'
+        type: 'red_brick'
      },
     { 
         id: 8,
-        x: 50,
-        y: 15,
+        left: 50,
+        top: 15,
         width: 50,
         height: 15,
         color: 'red',
-        type: 'normal'
+        type: 'red_brick'
     },
     { 
         id: 9,
-        x: 100,
-        y: 15,
+        left: 100,
+        top: 15,
         width: 50,
         height: 15,
         color: 'red',
-        type: 'normal'
+        type: 'red_brick'
     },
     { 
         id: 10,
-        x: 150,
-        y: 15,
+        left: 150,
+        top: 15,
         width: 50,
         height: 15,
         color: 'red',
-        type: 'normal'
+        type: 'red_brick'
     },
     { 
         id: 11,
-        x: 200,
-        y: 15,
+        left: 200,
+        top: 15,
         width: 50,
         height: 15,
         color: 'red',
-        type: 'normal'
+        type: 'red_brick'
     },
     { 
         id: 12,
-        x: 250,
-        y: 15,
+        left: 250,
+        top: 15,
         width: 50,
         height: 15,
         color: 'red',
-        type: 'normal'
+        type: 'red_brick'
     },
     { 
         id: 13,
-        x: 0,
-        y: 30,
+        left: 0,
+        top: 30,
         width: 50,
         height: 15,
         color: 'yellow',
-        type: 'normal'
+        type: 'yellow_brick'
      },
     { 
         id: 14,
-        x: 50,
-        y: 30,
+        left: 50,
+        top: 30,
         width: 50,
         height: 15,
         color: 'yellow',
-        type: 'normal'
+        type: 'yellow_brick'
     },
     { 
         id: 15,
-        x: 100,
-        y: 30,
+        left: 100,
+        top: 30,
         width: 50,
         height: 15,
         color: 'yellow',
-        type: 'normal'
+        type: 'yellow_brick'
     },
     { 
         id: 16,
-        x: 150,
-        y: 30,
+        left: 150,
+        top: 30,
         width: 50,
         height: 15,
         color: 'yellow',
-        type: 'normal'
+        type: 'yellow_brick'
     },
     { 
         id: 17,
-        x: 200,
-        y: 30,
+        left: 200,
+        top: 30,
         width: 50,
         height: 15,
         color: 'yellow',
-        type: 'normal'
+        type: 'yellow_brick'
     },
     { 
         id: 18,
-        x: 250,
-        y: 30,
+        left: 250,
+        top: 30,
         width: 50,
         height: 15,
         color: 'yellow',
-        type: 'normal'
+        type: 'yellow_brick'
     },
     { 
         id: 19,
-        x: 60,
-        y: 190,
+        left: 60,
+        top: 190,
         width: 25,
         height: 25,
         color: 'blue',
-        type: 'block'
+        type: 'blue_block'
     },
     { 
         id: 20,
-        x: 200,
-        y: 190,
+        left: 200,
+        top: 190,
         width: 25,
         height: 25,
         color: 'blue',
-        type: 'block'
+        type: 'blue_block'
     },
     { 
         id: 21,
-        x: 10,
-        y: 315,
+        left: 10,
+        top: 315,
         width: 25,
         height: 25,
         color: 'blue',
-        type: 'block'
+        type: 'blue_block'
      },
      { 
         id: 22,
-        x: 250,
-        y: 315,
+        left: 250,
+        top: 315,
         width: 25,
         height: 25,
         color: 'blue',
-        type: 'block'
+        type: 'blue_block'
      },
 ];

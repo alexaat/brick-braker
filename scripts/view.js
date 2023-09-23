@@ -8,6 +8,9 @@ const ball = document.querySelector('#ball');
 const brickMap = new Map();
 brickMap.set("red_block", "url('../images/red_block.jpg')");
 brickMap.set("blue_block", "url('../images/blue_block.jpeg')");
+brickMap.set("purple_brick", "url('../images/purple_brick.jpg')");
+brickMap.set("yellow_brick", "url('../images/yellow_brick.jpg')");
+brickMap.set("red_brick", "url('../images/red_brick.jpg')");
 
 
 const renderMessage = (text) => {
@@ -71,7 +74,7 @@ export const renderPlayBoard = (width, height) => {
 
 export const renderBlock = (block) => {
     let div = document.createElement('div');
-    div.classList.add('wall-block');
+    div.classList.add('block');
     div.style.width = `${block.width}px`;
     div.style.height = `${block.height}px`;
     div.style.left = `${block.left}px`;
