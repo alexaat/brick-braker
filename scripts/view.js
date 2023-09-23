@@ -13,7 +13,7 @@ brickMap.set("yellow_brick", "url('../images/yellow_brick.jpg')");
 brickMap.set("red_brick", "url('../images/red_brick.jpg')");
 
 
-const renderMessage = (text) => {
+export const renderMessage = (text) => {
     message.textContent = text;
 }
 const renderScore = (score) => {

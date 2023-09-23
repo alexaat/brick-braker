@@ -14,7 +14,7 @@ import { getWalls,
          getGameState,
          setGameState
         } from "./model.js";
-import {renderBlock, renderPlayBoard, renderPaddle, renderBall} from "./view.js";
+import {renderBlock, renderPlayBoard, renderPaddle, renderBall, renderMessage} from "./view.js";
 
 const setUp = () => {
 
@@ -93,20 +93,23 @@ const initControlls = () => {
 
 export const handleKeyPress = (key) => {
     if(key === ' '){
-
-        const gameState = getGameState();
         
+        const gameState = getGameState();
+
         if(gameState === gameStateReady || gameState === gameStatePaused){
             setGameState(gameStateRunning);
+            renderMessage('');
             return;
         }
         if(gameState === gameStateRunning){
             setGameState(gameStatePaused);
+            renderMessage('Paused');
             return;
         }
         if(gameState === gameStateGameOver){
             //resetGame();
             setGameState(gameStateReady);
+            renderMessage('Game over. Press SPACE to play again.');
             return;
         }
         
