@@ -1,4 +1,4 @@
-import {playBoardHeight, playBoardWidth, blockSize, paddleWidth, paddleHeight, ballSize, paddleSpeed, gameStateReady} from './constants.js'
+import {playBoardHeight, playBoardWidth, blockSize, paddleWidth, paddleHeight, ballSize, paddleSpeed, gameStateReady, gameStateRunning, defaultSpeedX, defaultSpeedY} from './constants.js'
 import { level1 } from '../levels/level1.js';
 
 const levels = [level1];
@@ -21,6 +21,9 @@ let isLeftDown = false;
 let isRightDown = false;
 
 let gameState = gameStateReady;
+
+let ballSpeedX = defaultSpeedX;
+let ballSpeedY = defaultSpeedY;
 
 export const getWalls = () => {
     const walls = [];
@@ -58,18 +61,21 @@ export const setLeftArrow = (val) => {
 };
 
 export const updatePuddlePosition = () => {
-    if(isLeftDown === true){
-        if(paddleX-paddleSpeed < 0) {
-            paddleX = 0;
-        }else{
-            paddleX -= paddleSpeed;
-        }       
-    }else if (isRightDown === true){
-        if(paddleX + paddleSpeed > playBoardWidthPx - paddleWidth){
-            paddleX = playBoardWidthPx - paddleWidth;
-        }else{
-            paddleX += paddleSpeed;
-        }        
+    
+    if(gameState === gameStateReady || gameState === gameStateRunning){
+        if(isLeftDown === true){
+            if(paddleX-paddleSpeed < 0) {
+                paddleX = 0;
+            }else{
+                paddleX -= paddleSpeed;
+            }       
+        }else if (isRightDown === true){
+            if(paddleX + paddleSpeed > playBoardWidthPx - paddleWidth){
+                paddleX = playBoardWidthPx - paddleWidth;
+            }else{
+                paddleX += paddleSpeed;
+            }        
+        }
     }
 }
 
@@ -78,11 +84,23 @@ export const updateBallPosition = () => {
         case gameStateReady:
             ballX = paddleX + paddleWidth/2;
         break;
+        case gameStateRunning:
+            ballX += ballSpeedX;
+            ballY += ballSpeedY;
+        break;
     }
 }
 
 export const getBricks = () => {
     return levels[level - 1];
+}
+
+export const getGameState = () => {
+    return gameState;
+}
+
+export const setGameState = (state) => {
+    gameState = state;
 }
 
 

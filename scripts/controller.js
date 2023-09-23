@@ -1,5 +1,5 @@
 
-import { paddleWidth, paddleHeight, ballSize } from "./constants.js";
+import { paddleWidth, paddleHeight, ballSize, gameStateReady, gameStatePaused, gameStateGameOver, gameStateRunning } from "./constants.js";
 import { getWalls,
          playBoardHeightPx,
          playBoardWidthPx,
@@ -10,7 +10,9 @@ import { getWalls,
          setLeftArrow,
          updatePuddlePosition,
          updateBallPosition,
-         getBricks
+         getBricks,
+         getGameState,
+         setGameState
         } from "./model.js";
 import {renderBlock, renderPlayBoard, renderPaddle, renderBall} from "./view.js";
 
@@ -91,7 +93,9 @@ const initControlls = () => {
 
 export const handleKeyPress = (key) => {
     if(key === ' '){
-        /*
+
+        const gameState = getGameState();
+        
         if(gameState === gameStateReady || gameState === gameStatePaused){
             setGameState(gameStateRunning);
             return;
@@ -101,11 +105,11 @@ export const handleKeyPress = (key) => {
             return;
         }
         if(gameState === gameStateGameOver){
-            resetGame();
+            //resetGame();
             setGameState(gameStateReady);
             return;
         }
-        */
+        
     }
     if(key === 'Escape'){
 
