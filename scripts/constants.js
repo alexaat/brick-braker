@@ -8,7 +8,7 @@ export const ballSize = 10;
 export const defaultSpeedX = -3.7;
 export const defaultSpeedY = -4.0;
 
-export const paddleSpeed = 5.0;
+export const paddleSpeedX = 5.0;
 
 export const gameStateReady = 'Ready';
 export const gameStatePaused = 'Paused';
