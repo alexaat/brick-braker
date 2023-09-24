@@ -1,4 +1,4 @@
-import {playBoardHeight, playBoardWidth, blockSize, paddleWidth, paddleHeight, ballSize, paddleSpeedX, gameStateReady, gameStateRunning, defaultSpeedX, defaultSpeedY} from './constants.js'
+import {playBoardHeight, playBoardWidth, blockSize, paddleWidth, paddleHeight, ballSize, paddleSpeedX, gameStateReady, gameStateRunning, defaultSpeedX, defaultSpeedY, paddleImagesSource} from './constants.js'
 import { level1 } from '../levels/level1.js';
 
 const levels = [level1];
@@ -12,6 +12,7 @@ let level = 1;
 let lives = 3;
 let paddleX = (playBoardWidthPx - paddleWidth)/2;
 let paddleY = playBoardHeightPx - paddleHeight;
+let paddleSrc = paddleImagesSource[lives-1];
 
 let ballX = playBoardWidthPx/2;
 let ballY = paddleY - ballSize ;
@@ -26,6 +27,8 @@ let ballSpeedX = defaultSpeedX;
 let ballSpeedY = defaultSpeedY;
 
 let score = 0;
+
+let message = '';
 
 
 export const getWalls = () => {
@@ -44,7 +47,7 @@ export const getWalls = () => {
 }
 
 export const getPaddle = () => {
-    return {left: paddleX, top: paddleY, width: paddleWidth, height: paddleHeight, speedX: paddleSpeedX}
+    return {left: paddleX, top: paddleY, width: paddleWidth, height: paddleHeight, speedX: paddleSpeedX, src: paddleSrc}
 }
 
 export const getLives = () => {
@@ -52,7 +55,7 @@ export const getLives = () => {
 }
 
 export const getBall = () => {
-    return {left: ballX, top: ballY, visibility: ballVisibility, speedX: ballSpeedX, speedY: ballSpeedY}
+    return {left: ballX, top: ballY, visibility: ballVisibility, speedX: ballSpeedX, speedY: ballSpeedY, size: ballSize}
 } 
 
 export const setRightArrow = (val) => {
@@ -63,29 +66,16 @@ export const setLeftArrow = (val) => {
     isLeftDown = val;
 };
 
-export const updatePaddle = ({left, top}) => {
+export const updatePaddle = ({left, top, src}) => {
     if(left !== undefined){
         paddleX = left;
     }
     if(top !== undefined){
         paddleY = top;
     }
-    
-    // if(gameState === gameStateReady || gameState === gameStateRunning){
-    //     if(isLeftDown === true){
-    //         if(paddleX-paddleSpeed < 0) {
-    //             paddleX = 0;
-    //         }else{
-    //             paddleX -= paddleSpeed;
-    //         }       
-    //     }else if (isRightDown === true){
-    //         if(paddleX + paddleSpeed > playBoardWidthPx - paddleWidth){
-    //             paddleX = playBoardWidthPx - paddleWidth;
-    //         }else{
-    //             paddleX += paddleSpeed;
-    //         }        
-    //     }
-    // }
+    if(src!==undefined){
+        paddleSrc = src;
+    }
 }
 
 export const updateBall = ({left, top, visibility, speedX, speedY}) => {
@@ -139,3 +129,14 @@ export const updateBrick = (brick) => {
     levels[level-1] = [...levels[level-1].filter(b => b.id !== brick.id), brick];
 } 
 
+export const setLives = (val) => {
+    lives = val;
+}
+
+export const setMessage = (val) => {
+    message = val;
+}
+
+export const getMessage = () => {
+    return message;
+}

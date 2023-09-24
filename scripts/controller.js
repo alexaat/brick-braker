@@ -1,10 +1,11 @@
 
-import { paddleWidth, paddleHeight, ballSize, gameStateReady, gameStatePaused, gameStateGameOver, gameStateRunning } from "./constants.js";
+import { paddleWidth, paddleHeight, ballSize, gameStateReady, gameStatePaused, gameStateGameOver, gameStateRunning, paddleImagesSource, defaultSpeedX, defaultSpeedY } from "./constants.js";
 import { getWalls,
          playBoardHeightPx,
          playBoardWidthPx,
          getPaddle,
          getLives,
+         setLives,
          getBall,
          setRightArrow,
          setLeftArrow,
@@ -17,7 +18,9 @@ import { getWalls,
          removeBlockFromModel,
          getScore,
          setScore,
-         updateBrick
+         updateBrick,
+         setMessage,
+         getMessage
         } from "./model.js";
 import {renderBlock, renderPlayBoard, renderPaddle, renderBall, renderMessage, removeBlockFromDOM, renderScore} from "./view.js";
 
@@ -35,11 +38,11 @@ const setUp = () => {
     });
 
     const lives = getLives();
-    const paddlePosition = getPaddle();
-    renderPaddle({left: paddlePosition.left, top: paddlePosition.top, lives, width: paddleWidth, height: paddleHeight});
+    const paddleData = getPaddle();
+    renderPaddle({...paddleData});
 
-    const ballPosition = getBall();
-    renderBall({left: ballPosition.left, top: ballPosition.top, size: ballSize});
+    const ballData = getBall();
+    renderBall({...ballData});
 
     initControlls();
 
@@ -75,13 +78,14 @@ const updateScreen = () => {
     renderPaddle({...paddleData});
 
     //Update Ball
-    if(gameState === gameStateReady){
-        const ballX = paddleData.left + paddleData.width/2;
-        updateBall({left: ballX});
+    if(gameState === gameStateReady){       
+        const left = paddleData.left + paddleData.width/2;
+        updateBall({left});
     } else if(gameState === gameStateRunning){
         ballData = checkCollisions({ballData, paddleData, playBoardWidthPx, playBoardHeightPx});        
         updateBall({...ballData});
     }
+
     ballData = getBall();
     renderBall({...ballData});
 }
@@ -137,18 +141,21 @@ export const handleKeyPress = (key) => {
 
         if(gameState === gameStateReady || gameState === gameStatePaused){
             setGameState(gameStateRunning);
-            renderMessage('');
+            setMessage('');
+            renderMessage(getMessage());
             return;
         }
         if(gameState === gameStateRunning){
             setGameState(gameStatePaused);
-            renderMessage('Paused');
+            setMessage('Paused');
+            renderMessage(getMessage());
             return;
         }
         if(gameState === gameStateGameOver){
             //resetGame();
             setGameState(gameStateReady);
-            renderMessage('Game over. Press SPACE to play again.');
+            setMessage('Press SPACE to play again')
+            renderMessage(getMessage());
             return;
         }
         
@@ -193,8 +200,8 @@ const checkCollisions = ({ballData, paddleData, playBoardWidthPx, playBoardHeigh
         ballSpeedX = -Math.abs(ballSpeedX);
     }
     if (ballY > playBoardHeightPx - ballSize){
-        //ballIsOutHandler();
-        return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY, visibility: false};       
+        return ballIsOutHandler();
+        //return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY, visibility: true};       
     }  
 
     //Paddle collisions    
@@ -274,6 +281,35 @@ const checkCollisions = ({ballData, paddleData, playBoardWidthPx, playBoardHeigh
    
     return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};
 
+}
+
+const ballIsOutHandler = () => {   
+    
+    const lives = getLives();
+    if(lives < 2){        
+        //Game Over
+        updateBall({visibility: false});
+        renderBall({...getBall()});   
+        setGameState(gameStateGameOver);
+        setMessage('Game Over. Press SPACE to play again');
+    }else{        
+        setGameState(gameStateReady);
+        setLives(lives - 1);      
+
+        let paddleData = getPaddle();
+        paddleData.src = paddleImagesSource[getLives() - 1];
+        updatePaddle({...paddleData});
+
+        let ballData = getBall();
+        ballData.top = paddleData.top - ballData.size;
+        ballData.speedX = defaultSpeedX;
+        ballData.speedY = defaultSpeedY;
+        updateBall({...ballData});      
+    }
+
+    renderMessage(getMessage());
+
+    return getBall();
 }
 
 const handleBrickCollision = (brick, length) => {

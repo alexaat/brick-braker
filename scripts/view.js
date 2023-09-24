@@ -19,27 +19,33 @@ export const renderMessage = (text) => {
 export const renderScore = (score) => {
     scoreLable.textContent = `Score: ${score}`;
 }
-const renderLevel = (level) => {
+export const renderLevel = (level) => {
     levelLable.textContent = `Level: ${level}`;
 }
-export const renderPaddle = ({left, top, lives, width, height}) => {
+
+export const renderPaddle = ({left, top, width, height, src}) => {
 
     paddle.style.left = `${left}px`; 
     paddle.style.top = `${top}px`; 
 
-    if(lives !== undefined){
+    // if(lives !== undefined){
+    //     const img = paddle.querySelector('img');
+    //     switch(lives){
+    //         case 3:
+    //             img.src='./images/paddle_2.jpg';          
+    //             break;
+    //         case 2:
+    //             img.src='./images/paddle_1.jpg';            
+    //             break;
+    //         case 1:
+    //             img.src='./images/paddle_0.jpg';           
+    //             break;
+    //     }
+    // }
+
+    if(src!==undefined){
         const img = paddle.querySelector('img');
-        switch(lives){
-            case 3:
-                img.src='./images/paddle_2.jpg';          
-                break;
-            case 2:
-                img.src='./images/paddle_1.jpg';            
-                break;
-            case 1:
-                img.src='./images/paddle_0.jpg';           
-                break;
-        }
+        img.src=`./images/${src}`;   
     }
     if(width !== undefined){
         paddle.style.width = `${width}px`;        
@@ -50,6 +56,7 @@ export const renderPaddle = ({left, top, lives, width, height}) => {
 
 }
 export const renderBall = ({left, top, size, visibility}) => {   
+      
     ball.style.left = `${left}px`; 
     ball.style.top = `${top}px`;
 
