@@ -16,7 +16,8 @@ import { getWalls,
          getControlls,
          removeBlockFromModel,
          getScore,
-         setScore
+         setScore,
+         updateBrick
         } from "./model.js";
 import {renderBlock, renderPlayBoard, renderPaddle, renderBall, renderMessage, removeBlockFromDOM, renderScore} from "./view.js";
 
@@ -242,86 +243,56 @@ const checkCollisions = ({ballData, paddleData, playBoardWidthPx, playBoardHeigh
         const brickBottom = brickTop + brick.height;
 
         //Bottom hit
-        if(topX.isBetween(brickLeft, brickRight) && topY.isBetween(brickTop, brickBottom) && ballSpeedY<0){
-            console.log('Bottom hit');
+        if(topX.isBetween(brickLeft, brickRight) && topY.isBetween(brickTop, brickBottom) && ballSpeedY<0){            
             ballSpeedY = Math.abs(ballSpeedY);
-           // handleBrickCollisionEffect(brick);
-            removeBlockFromModel(brick.id);
-            removeBlockFromDOM(brick.id);
-            const score = getScore() + 1;
-            setScore(score);
-            renderScore(score);
-            if(bricks.length === 1){
-                //Level Complete
-            }
+            handleBrickCollision(brick, bricks.length);
             return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};         
         }
 
-    }
-
-
-   
-    
-    /*
-
-    //Brick collisions
-    for(let i = 0; i<bricksAsElements.length; i++){
-        console.log(bricksAsElements.length);
-        const brick = bricksAsElements[i];
-        const brickLeft = brick.offsetLeft;
-        const brickTop = brick.offsetTop;
-        const brickRight = brickLeft + brick.offsetWidth;
-        const brickBottom = brickTop + brick.offsetHeight;
-       
-        //Bottom hit
-        if(topX.isBetween(brickLeft, brickRight) && topY.isBetween(brickTop, brickBottom) && speedY<0){
-            console.log('Bottom hit');
-            ballX -=speedX;
-            ballY -=speedY;
-            //speedY = -speedY;
-            speedY = Math.abs(speedY);
-            handleBrickCollisionEffect(brick);
-            //return;
-        }
-
         //Top hit
-        if(bottomX.isBetween(brickLeft, brickRight) && bottomY.isBetween(brickTop, brickBottom) && speedY > 0){
-            console.log('Top hit');
-            ballX -=speedX;
-            ballY -=speedY;
-            //speedY = -speedY;
-            speedY = -Math.abs(speedY);
-            handleBrickCollisionEffect(brick);
-            //return;
+        if(bottomX.isBetween(brickLeft, brickRight) && bottomY.isBetween(brickTop, brickBottom) && ballSpeedY > 0){
+            ballSpeedY = -Math.abs(ballSpeedY);
+            handleBrickCollision(brick, bricks.length);
+            return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};    
         }
 
         //Left hit
-        if(rightX.isBetween(brickLeft, brickRight) && rightY.isBetween(brickTop, brickBottom) && speedX > 0){
-            console.log('Left hit');
-            ballX -=speedX;
-            ballY -=speedY;
-            //speedX = -speedX;
-            speedX = -Math.abs(speedX);
-            handleBrickCollisionEffect(brick);
-            //return;
+        if(rightX.isBetween(brickLeft, brickRight) && rightY.isBetween(brickTop, brickBottom) && ballSpeedX > 0){
+            ballSpeedX = -Math.abs(ballSpeedX);
+            handleBrickCollision(brick, bricks.length);
+            return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};    
         }
 
         //Right hit
-        if(leftX.isBetween(brickLeft, brickRight) && leftY.isBetween(brickTop, brickBottom) && speedX < 0){
-            console.log('Right hit');
-            ballX -=speedX;
-            ballY -=speedY;
-            //speedX = -speedX;
-            speedX = Math.abs(speedX);
-            handleBrickCollisionEffect(brick);
-            //return;
+        if(leftX.isBetween(brickLeft, brickRight) && leftY.isBetween(brickTop, brickBottom) && ballSpeedX < 0){
+            ballSpeedX = Math.abs(ballSpeedX);
+            handleBrickCollision(brick, bricks.length);
+            return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};  
         }
 
-    }
-    */
-
+    }   
+   
     return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};
 
+}
+
+const handleBrickCollision = (brick, length) => {
+    
+    const hits = brick.hits;
+    if(hits !== undefined){
+        if(hits>1){
+            updateBrick({...brick, hits: hits-1});
+        }else{
+            removeBlockFromModel(brick.id);
+            removeBlockFromDOM(brick.id);
+        }
+        const score = getScore() + 1;
+        setScore(score);
+        renderScore(score);
+        if(length === 1){
+            //Level Complete
+        }
+    }
 }
 
 startGame();

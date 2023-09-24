@@ -88,7 +88,7 @@ export const renderBlock = (block) => {
 }
 
 export const removeBlockFromDOM = (id) => {
-
+    document.getElementById(id).remove();
 }
 
 

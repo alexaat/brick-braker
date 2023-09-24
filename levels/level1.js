@@ -5,7 +5,7 @@ export const level1 = [
         top: 0,
         width: 50,
         height: 15,
-        color: 'purple',
+        hits: 1,
         type: 'purple_brick'
      },
      
@@ -15,7 +15,7 @@ export const level1 = [
         top: 0,
         width: 50,
         height: 15,
-        color: 'purple',
+        hits: 1,
         type: 'purple_brick'
       },
     { 
@@ -24,7 +24,7 @@ export const level1 = [
         top: 0,
         width: 50,
         height: 15,
-        color: 'purple',
+        hits: 1,
         type: 'purple_brick'
     },
     { 
@@ -33,7 +33,7 @@ export const level1 = [
         top: 0,
         width: 50,
         height: 15,
-        color: 'purple',
+        hits: 1,
         type: 'purple_brick'
     },
     { 
@@ -42,7 +42,7 @@ export const level1 = [
         top: 0,
         width: 50,
         height: 15,
-        color: 'purple',
+        hits: 1,
         type: 'purple_brick'
     },
     { 
@@ -51,7 +51,7 @@ export const level1 = [
         top: 0,
         width: 50,
         height: 15,
-        color: 'purple',
+        hits: 1,
         type: 'purple_brick'
     },
     { 
@@ -60,7 +60,7 @@ export const level1 = [
         top: 15,
         width: 50,
         height: 15,
-        color: 'red',
+        hits: 1,
         type: 'red_brick'
      },
     { 
@@ -69,7 +69,7 @@ export const level1 = [
         top: 15,
         width: 50,
         height: 15,
-        color: 'red',
+        hits: 1,
         type: 'red_brick'
     },
     { 
@@ -78,7 +78,7 @@ export const level1 = [
         top: 15,
         width: 50,
         height: 15,
-        color: 'red',
+        hits: 1,
         type: 'red_brick'
     },
     { 
@@ -87,7 +87,7 @@ export const level1 = [
         top: 15,
         width: 50,
         height: 15,
-        color: 'red',
+        hits: 1,
         type: 'red_brick'
     },
     { 
@@ -96,7 +96,7 @@ export const level1 = [
         top: 15,
         width: 50,
         height: 15,
-        color: 'red',
+        hits: 1,
         type: 'red_brick'
     },
     { 
@@ -105,7 +105,7 @@ export const level1 = [
         top: 15,
         width: 50,
         height: 15,
-        color: 'red',
+        hits: 1,
         type: 'red_brick'
     },
     { 
@@ -114,7 +114,7 @@ export const level1 = [
         top: 30,
         width: 50,
         height: 15,
-        color: 'yellow',
+        hits: 1,
         type: 'yellow_brick'
      },
     { 
@@ -123,7 +123,7 @@ export const level1 = [
         top: 30,
         width: 50,
         height: 15,
-        color: 'yellow',
+        hits: 1,
         type: 'yellow_brick'
     },
     { 
@@ -132,7 +132,7 @@ export const level1 = [
         top: 30,
         width: 50,
         height: 15,
-        color: 'yellow',
+        hits: 1,
         type: 'yellow_brick'
     },
     { 
@@ -141,7 +141,7 @@ export const level1 = [
         top: 30,
         width: 50,
         height: 15,
-        color: 'yellow',
+        hits: 1,
         type: 'yellow_brick'
     },
     { 
@@ -150,7 +150,7 @@ export const level1 = [
         top: 30,
         width: 50,
         height: 15,
-        color: 'yellow',
+        hits: 1,
         type: 'yellow_brick'
     },
     { 
@@ -159,7 +159,7 @@ export const level1 = [
         top: 30,
         width: 50,
         height: 15,
-        color: 'yellow',
+        hits: 1,
         type: 'yellow_brick'
     },
     { 
@@ -168,7 +168,6 @@ export const level1 = [
         top: 190,
         width: 25,
         height: 25,
-        color: 'blue',
         type: 'blue_block'
     },
     { 
@@ -177,7 +176,6 @@ export const level1 = [
         top: 190,
         width: 25,
         height: 25,
-        color: 'blue',
         type: 'blue_block'
     },
     { 
@@ -186,7 +184,6 @@ export const level1 = [
         top: 315,
         width: 25,
         height: 25,
-        color: 'blue',
         type: 'blue_block'
      },
      { 
@@ -195,7 +192,6 @@ export const level1 = [
         top: 315,
         width: 25,
         height: 25,
-        color: 'blue',
         type: 'blue_block'
      },
 ];
