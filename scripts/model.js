@@ -1,7 +1,7 @@
 import {playBoardHeight, playBoardWidth, blockSize, paddleWidth, paddleHeight, ballSize, paddleSpeedX, gameStateReady, gameStateRunning, defaultSpeedX, defaultSpeedY, paddleImagesSource} from './constants.js'
 import { level1 } from '../levels/level1.js';
 
-const levels = [level1];
+let levels = [level1];
 
 const boardRight = playBoardWidth*blockSize;
 
@@ -27,7 +27,6 @@ let ballSpeedX = defaultSpeedX;
 let ballSpeedY = defaultSpeedY;
 
 let score = 0;
-
 let message = '';
 
 
@@ -136,7 +135,15 @@ export const setLives = (val) => {
 export const setMessage = (val) => {
     message = val;
 }
-
 export const getMessage = () => {
     return message;
+}
+export const resetLevels = () => {
+    levels = [level1];
+}
+export const setLevel = (val) => {
+    level = val;
+}
+export const getLevel = () => {
+    return level;
 }

@@ -20,9 +20,12 @@ import { getWalls,
          setScore,
          updateBrick,
          setMessage,
-         getMessage
+         getMessage,
+         resetLevels,
+         setLevel,
+         getLevel
         } from "./model.js";
-import {renderBlock, renderPlayBoard, renderPaddle, renderBall, renderMessage, removeBlockFromDOM, renderScore} from "./view.js";
+import {renderBlock, renderPlayBoard, renderPaddle, renderBall, renderMessage, removeBlockFromDOM, renderScore, renderLevel} from "./view.js";
 
 
 Number.prototype.isBetween = function(left, right){
@@ -152,10 +155,33 @@ export const handleKeyPress = (key) => {
             return;
         }
         if(gameState === gameStateGameOver){
-            //resetGame();
+            
             setGameState(gameStateReady);
-            setMessage('Press SPACE to play again')
+            setMessage('Press SPACE to play')
             renderMessage(getMessage());
+          
+            setLives(3);
+
+            const paddleData = getPaddle();
+            updatePaddle({left: (playBoardWidthPx - paddleData.width)/2, src: paddleImagesSource[getLives()-1]});
+
+            const ballData = getBall();
+            updateBall({top: paddleData.top - ballData.size, visibility: true, speedX: defaultSpeedX, speedY: defaultSpeedY});
+
+            setLevel(1);
+            renderLevel(getLevel());
+
+            setScore(0);
+            renderScore(getScore());
+
+            getBricks().forEach(b => removeBlockFromDOM(b.id));
+            
+            resetLevels();
+
+            getBricks().forEach(brick => renderBlock(brick));
+
+
+
             return;
         }
         
