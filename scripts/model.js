@@ -25,6 +25,7 @@ let gameState = gameStateReady;
 let ballSpeedX = defaultSpeedX;
 let ballSpeedY = defaultSpeedY;
 
+let score = 0;
 
 
 export const getWalls = () => {
@@ -119,5 +120,17 @@ export const setGameState = (state) => {
 
 export const getControlls = () => {
     return {isLeft: isLeftDown, isRight: isRightDown};
-} 
+}
+
+export const getScore = () => {
+    return score;
+}
+
+export const setScore = (val) => {
+    score = val;
+}
+
+export const removeBlockFromModel = (id) => {
+    
+}
 

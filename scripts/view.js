@@ -16,7 +16,7 @@ brickMap.set("red_brick", "url('../images/red_brick.jpg')");
 export const renderMessage = (text) => {
     message.textContent = text;
 }
-const renderScore = (score) => {
+export const renderScore = (score) => {
     scoreLable.textContent = `Score: ${score}`;
 }
 const renderLevel = (level) => {
@@ -73,15 +73,25 @@ export const renderPlayBoard = (width, height) => {
 }
 
 export const renderBlock = (block) => {
+    
     let div = document.createElement('div');
     div.classList.add('block');
     div.style.width = `${block.width}px`;
     div.style.height = `${block.height}px`;
     div.style.left = `${block.left}px`;
     div.style.top = `${block.top}px`;
+    if(block.id!==undefined){
+        div.setAttribute('id', block.id);
+    }  
     div.style.backgroundImage = brickMap.get(block.type);
     playBoard.appendChild(div);
 }
+
+export const removeBlockFromDOM = (id) => {
+
+}
+
+
 
 
 

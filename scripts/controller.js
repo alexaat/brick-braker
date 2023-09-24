@@ -13,9 +13,12 @@ import { getWalls,
          getBricks,
          getGameState,
          setGameState,
-         getControlls
+         getControlls,
+         removeBlockFromModel,
+         getScore,
+         setScore
         } from "./model.js";
-import {renderBlock, renderPlayBoard, renderPaddle, renderBall, renderMessage} from "./view.js";
+import {renderBlock, renderPlayBoard, renderPaddle, renderBall, renderMessage, removeBlockFromDOM, renderScore} from "./view.js";
 
 
 Number.prototype.isBetween = function(left, right){
@@ -227,7 +230,37 @@ const checkCollisions = ({ballData, paddleData, playBoardWidthPx, playBoardHeigh
         return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};
     }
 
-    return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};
+
+    //Brick Collisions
+    const bricks = getBricks();
+    for(let i = 0; i< bricks.length; i++){
+        const brick = bricks[i];
+
+        const brickLeft = brick.left;
+        const brickTop = brick.top;
+        const brickRight = brickLeft + brick.width;
+        const brickBottom = brickTop + brick.height;
+
+        //Bottom hit
+        if(topX.isBetween(brickLeft, brickRight) && topY.isBetween(brickTop, brickBottom) && ballSpeedY<0){
+            console.log('Bottom hit');
+            ballSpeedY = Math.abs(ballSpeedY);
+           // handleBrickCollisionEffect(brick);
+            removeBlockFromModel(brick.id);
+            removeBlockFromDOM(brick.id);
+            const score = getScore() + 1;
+            setScore(score);
+            renderScore(score);
+            if(bricks.length === 1){
+                //Level Complete
+            }
+            return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};         
+        }
+
+    }
+
+
+   
     
     /*
 
@@ -286,6 +319,8 @@ const checkCollisions = ({ballData, paddleData, playBoardWidthPx, playBoardHeigh
 
     }
     */
+
+    return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};
 
 }
 
