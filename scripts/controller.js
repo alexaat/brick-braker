@@ -1,5 +1,4 @@
 
-import { level1 } from "../levels/level1.js";
 import { ballSize,
          gameStateReady,
          gameStatePaused,
@@ -177,14 +176,14 @@ export const handleKeyPress = (key) => {
             const ballData = getBall();
             updateBall({top: paddleData.top - ballData.size, visibility: true, speedX: defaultSpeedX, speedY: defaultSpeedY});
 
+            getBricks().forEach(b => removeBlockFromDOM(b.id));
+
             setLevel(1);
             renderLevel(getLevel());
 
             setScore(0);
             renderScore(getScore());
-
-            getBricks().forEach(b => removeBlockFromDOM(b.id));
-            
+          
             resetLevels();
 
             getBricks().forEach(brick => renderBlock(brick));

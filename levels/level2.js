@@ -1,5 +1,5 @@
 export const level2 = [
-
+/*
     { 
         id: 1,
         left: 0,
@@ -64,6 +64,7 @@ export const level2 = [
         hits: 1,
         type: 'yellow_brick'
      },
+     */
     { 
         id: 8,
         left: 100,
@@ -72,7 +73,7 @@ export const level2 = [
         height: 15,
         hits: 1,
         type: 'yellow_brick'
-    },
+    },/*
     { 
         id: 9,
         left: 200,
@@ -82,6 +83,7 @@ export const level2 = [
         hits: 1,
         type: 'yellow_brick'
     }
+    */
     
    
 ]
