@@ -1,5 +1,14 @@
 
-import { paddleWidth, paddleHeight, ballSize, gameStateReady, gameStatePaused, gameStateGameOver, gameStateRunning, paddleImagesSource, defaultSpeedX, defaultSpeedY } from "./constants.js";
+import { level1 } from "../levels/level1.js";
+import { ballSize,
+         gameStateReady,
+         gameStatePaused,
+         gameStateGameOver,
+         gameStateRunning,
+         paddleImagesSource,
+         defaultSpeedX,
+         defaultSpeedY,
+         gameStateWin } from "./constants.js";
 import { getWalls,
          playBoardHeightPx,
          playBoardWidthPx,
@@ -23,7 +32,9 @@ import { getWalls,
          getMessage,
          resetLevels,
          setLevel,
-         getLevel
+         getLevel,
+         getMaxScore,
+         numberOfLevels
         } from "./model.js";
 import {renderBlock, renderPlayBoard, renderPaddle, renderBall, renderMessage, removeBlockFromDOM, renderScore, renderLevel} from "./view.js";
 
@@ -88,9 +99,7 @@ const updateScreen = () => {
         ballData = checkCollisions({ballData, paddleData, playBoardWidthPx, playBoardHeightPx});        
         updateBall({...ballData});
     }
-
-    ballData = getBall();
-    renderBall({...ballData});
+    renderBall({...getBall()});
 }
 
 const startGame = () => {
@@ -276,31 +285,34 @@ const checkCollisions = ({ballData, paddleData, playBoardWidthPx, playBoardHeigh
         //Bottom hit
         if(topX.isBetween(brickLeft, brickRight) && topY.isBetween(brickTop, brickBottom) && ballSpeedY<0){            
             ballSpeedY = Math.abs(ballSpeedY);
-            handleBrickCollision(brick, bricks.length);
-            return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};         
+            updateBall({speedY: ballSpeedY});
+            handleBrickCollision(brick);
+            return {...getBall()};         
         }
 
         //Top hit
         if(bottomX.isBetween(brickLeft, brickRight) && bottomY.isBetween(brickTop, brickBottom) && ballSpeedY > 0){
             ballSpeedY = -Math.abs(ballSpeedY);
-            handleBrickCollision(brick, bricks.length);
-            return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};    
+            updateBall({speedY: ballSpeedY});
+            handleBrickCollision(brick);
+            return {...getBall()};    
         }
 
         //Left hit
         if(rightX.isBetween(brickLeft, brickRight) && rightY.isBetween(brickTop, brickBottom) && ballSpeedX > 0){
             ballSpeedX = -Math.abs(ballSpeedX);
-            handleBrickCollision(brick, bricks.length);
-            return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};    
+            updateBall({speedX: ballSpeedX});
+            handleBrickCollision(brick);
+            return {...getBall()};    
         }
 
         //Right hit
         if(leftX.isBetween(brickLeft, brickRight) && leftY.isBetween(brickTop, brickBottom) && ballSpeedX < 0){
             ballSpeedX = Math.abs(ballSpeedX);
-            handleBrickCollision(brick, bricks.length);
-            return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};  
+            updateBall({speedX: ballSpeedX});
+            handleBrickCollision(brick);
+            return {...getBall()};  
         }
-
     }   
    
     return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};
@@ -336,9 +348,10 @@ const ballIsOutHandler = () => {
     return getBall();
 }
 
-const handleBrickCollision = (brick, length) => {
+const handleBrickCollision = (brick) => {
     
     const hits = brick.hits;
+
     if(hits !== undefined){
         if(hits>1){
             updateBrick({...brick, hits: hits-1});
@@ -346,15 +359,48 @@ const handleBrickCollision = (brick, length) => {
             removeBlockFromModel(brick.id);
             removeBlockFromDOM(brick.id);
         }
-        const score = getScore() + 1;
-        setScore(score);
+      
+        setScore(getScore() + 1);
+        
+        const score = getScore();
         renderScore(score);
-        if(length === 1){
-            //Level Complete
+        
+        const maxScore = getMaxScore(getLevel());
+
+        if(maxScore === score){
+
+           //Set Next Level 
+           console.log(numberOfLevels)
+            if(getLevel() + 1 > numberOfLevels){
+                setGameState(gameStateWin);
+                setMessage('You Win!!!');
+                renderMessage(getMessage());
+                console.log(getMessage());
+            }else{
+                getBricks().forEach(b => removeBlockFromDOM(b.id));
+
+                setLevel(getLevel() + 1);
+                const level = getLevel();
+                renderLevel(level);
+    
+                setMessage('Press SPACE to play')
+                renderMessage(getMessage());
+    
+                const paddleData = getPaddle();
+                updatePaddle({left: (playBoardWidthPx - paddleData.width)/2});
+    
+                const ballData = getBall();
+                updateBall({top: paddleData.top - ballData.size, speedX: defaultSpeedX, speedY: defaultSpeedY});
+                
+                const bricks = getBricks();
+                if(bricks){
+                    bricks.forEach(brick => renderBlock(brick));
+                }            
+    
+                setGameState(gameStateReady);
+            }
         }
     }
 }
 
 startGame();
-
-
