@@ -180,8 +180,6 @@ export const handleKeyPress = (key) => {
 
             getBricks().forEach(brick => renderBlock(brick));
 
-
-
             return;
         }
         
