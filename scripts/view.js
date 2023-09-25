@@ -11,6 +11,7 @@ brickMap.set("blue_block", "url('../images/blue_block.jpeg')");
 brickMap.set("purple_brick", "url('../images/purple_brick.jpg')");
 brickMap.set("yellow_brick", "url('../images/yellow_brick.jpg')");
 brickMap.set("red_brick", "url('../images/red_brick.jpg')");
+brickMap.set("green_brick", "url('../images/green_brick.jpg')");
 
 
 export const renderMessage = (text) => {

@@ -1,7 +1,19 @@
-import {playBoardHeight, playBoardWidth, blockSize, paddleWidth, paddleHeight, ballSize, paddleSpeedX, gameStateReady, gameStateRunning, defaultSpeedX, defaultSpeedY, paddleImagesSource} from './constants.js'
-import { level1 } from '../levels/level1.js';
+import {playBoardHeight,
+        playBoardWidth,
+        blockSize,
+        paddleWidth,
+        paddleHeight,
+        ballSize,
+        paddleSpeedX,
+        gameStateReady,
+        defaultSpeedX,
+        defaultSpeedY,
+        paddleImagesSource} from './constants.js';
 
-let levels = [level1];
+import { level1 } from '../levels/level1.js';
+import { level2 } from '../levels/level2.js';
+
+let levels = [level1, level2];
 
 const boardRight = playBoardWidth*blockSize;
 
@@ -43,28 +55,22 @@ export const getWalls = () => {
         walls.push({left: boardRight, top: i * blockSize, width: blockSize, height: blockSize, type: 'red_block'});
     }
     return walls;
-}
-
+};
 export const getPaddle = () => {
     return {left: paddleX, top: paddleY, width: paddleWidth, height: paddleHeight, speedX: paddleSpeedX, src: paddleSrc}
-}
-
+};
 export const getLives = () => {
     return lives;
-}
-
+};
 export const getBall = () => {
     return {left: ballX, top: ballY, visibility: ballVisibility, speedX: ballSpeedX, speedY: ballSpeedY, size: ballSize}
-} 
-
+};
 export const setRightArrow = (val) => {
     isRightDown = val;
 };
-
 export const setLeftArrow = (val) => {
     isLeftDown = val;
 };
-
 export const updatePaddle = ({left, top, src}) => {
     if(left !== undefined){
         paddleX = left;
@@ -75,8 +81,7 @@ export const updatePaddle = ({left, top, src}) => {
     if(src!==undefined){
         paddleSrc = src;
     }
-}
-
+};
 export const updateBall = ({left, top, visibility, speedX, speedY}) => {
     if(left !== undefined){
         ballX = left;
@@ -93,57 +98,47 @@ export const updateBall = ({left, top, visibility, speedX, speedY}) => {
     if(speedY !== undefined){
         ballSpeedY = speedY;
     }
-}
-
+};
 export const getBricks = () => {
     return levels[level - 1];
-}
-
+};
 export const getGameState = () => {
     return gameState;
-}
-
+};
 export const setGameState = (state) => {
     gameState = state;
-}
-
+};
 export const getControlls = () => {
     return {isLeft: isLeftDown, isRight: isRightDown};
-}
-
+};
 export const getScore = () => {
     return score;
-}
-
+};
 export const setScore = (val) => {
     score = val;
-}
-
+};
 export const removeBlockFromModel = (id) => {
     levels[level-1] = levels[level-1].filter(b => b.id !== id);
     console.log(getBricks().length);
-}
-
+};
 export const updateBrick = (brick) => {
     levels[level-1] = [...levels[level-1].filter(b => b.id !== brick.id), brick];
-} 
-
+};
 export const setLives = (val) => {
     lives = val;
-}
-
+};
 export const setMessage = (val) => {
     message = val;
-}
+};
 export const getMessage = () => {
     return message;
-}
+};
 export const resetLevels = () => {
-    levels = [level1];
-}
+    levels = [level1, level2];
+};
 export const setLevel = (val) => {
     level = val;
-}
+};
 export const getLevel = () => {
     return level;
-}
+};
