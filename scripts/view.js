@@ -13,7 +13,6 @@ brickMap.set("yellow_brick", "url('../images/yellow_brick.jpg')");
 brickMap.set("red_brick", "url('../images/red_brick.jpg')");
 brickMap.set("green_brick", "url('../images/green_brick.jpg')");
 
-
 export const renderMessage = (text) => {
     message.textContent = text;
 }
@@ -29,21 +28,6 @@ export const renderPaddle = ({left, top, width, height, src}) => {
     paddle.style.left = `${left}px`; 
     paddle.style.top = `${top}px`; 
 
-    // if(lives !== undefined){
-    //     const img = paddle.querySelector('img');
-    //     switch(lives){
-    //         case 3:
-    //             img.src='./images/paddle_2.jpg';          
-    //             break;
-    //         case 2:
-    //             img.src='./images/paddle_1.jpg';            
-    //             break;
-    //         case 1:
-    //             img.src='./images/paddle_0.jpg';           
-    //             break;
-    //     }
-    // }
-
     if(src!==undefined){
         const img = paddle.querySelector('img');
         img.src=`./images/${src}`;   
@@ -57,9 +41,12 @@ export const renderPaddle = ({left, top, width, height, src}) => {
 
 }
 export const renderBall = ({left, top, size, visibility}) => {   
-      
-    ball.style.left = `${left}px`; 
-    ball.style.top = `${top}px`;
+    if(left !== undefined){
+        ball.style.left = `${left}px`; 
+    }
+    if(top !== undefined){
+        ball.style.top = `${top}px`;
+    } 
 
     if(size !== undefined){
         ball.style.width = `${size}px`;
