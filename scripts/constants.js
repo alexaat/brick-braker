@@ -17,5 +17,3 @@ export const gameStateGameOver = 'Game Over';
 export const gameStateWin = 'Win';
 
 export const paddleImagesSource = ['paddle_0.jpg','paddle_1.jpg','paddle_2.jpg']; 
-
-
