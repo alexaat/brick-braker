@@ -15,6 +15,16 @@ import { level2 } from '../levels/level2.js';
 
 let levels = [level1, level2];
 
+const maxScores = levels.map(level => {
+    return level.reduce((sum, brick) => {
+            const hits = brick.hits === undefined ? 0 : brick.hits
+            return sum + hits;
+            },
+        0);
+});
+
+export const numberOfLevels = levels.length;
+
 const boardRight = playBoardWidth*blockSize;
 
 export const playBoardWidthPx = playBoardWidth*blockSize;
@@ -100,6 +110,9 @@ export const updateBall = ({left, top, visibility, speedX, speedY}) => {
     }
 };
 export const getBricks = () => {
+    if(level > levels.length){
+        return null;
+    }
     return levels[level - 1];
 };
 export const getGameState = () => {
@@ -142,3 +155,11 @@ export const setLevel = (val) => {
 export const getLevel = () => {
     return level;
 };
+export const getMaxScore = (level) => {
+    const cumulative = maxScores.map((score, index, arr) => {
+        const prevScore = arr[index-1] === undefined ? 0 : arr[index-1];
+        return score + prevScore;
+    });
+
+    return cumulative[level-1];
+}
