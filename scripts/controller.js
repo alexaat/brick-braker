@@ -70,6 +70,8 @@ const updateScreen = () => {
     let paddleData = getPaddle();
     const controlls = getControlls();
 
+
+    console.log(gameState)
        
     //Update Paddle  
     if(gameState === gameStateReady || gameState === gameStateRunning){       
@@ -95,8 +97,7 @@ const updateScreen = () => {
         const left = paddleData.left + paddleData.width/2;
         updateBall({left});
     } else if(gameState === gameStateRunning){
-        ballData = checkCollisions({ballData, paddleData, playBoardWidthPx, playBoardHeightPx});        
-        updateBall({...ballData});
+        checkCollisions({ballData, paddleData, playBoardWidthPx, playBoardHeightPx});       
     }
     renderBall({...getBall()});
 }
@@ -222,52 +223,61 @@ const checkCollisions = ({ballData, paddleData, playBoardWidthPx, playBoardHeigh
     //Left hit
     if(ballX< 0){
         ballSpeedX = Math.abs(ballSpeedX);
+        updateBall({speedX: ballSpeedX});
     }
     //Top hit
     if(ballY<0){
-        ballSpeedY = Math.abs(ballSpeedY);       
+        ballSpeedY = Math.abs(ballSpeedY); 
+        updateBall({speedY: ballSpeedY});      
     }
     //Right hit
     if (ballX>playBoardWidthPx-ballSize) {   
         ballSpeedX = -Math.abs(ballSpeedX);
+        updateBall({speedX: ballSpeedX});
     }
     if (ballY > playBoardHeightPx - ballSize){
-        return ballIsOutHandler();
-        //return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY, visibility: true};       
+        ballIsOutHandler();
+        return;
+        
     }  
 
     //Paddle collisions    
     //Puddle top
     if(ballX.isBetween(paddleX, paddleX+paddleWidth) && ballY>paddleY-ballSize){
         ballSpeedY = -Math.abs(ballSpeedY);
-        return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};
+        updateBall({speedY: ballSpeedY});
+        return;
     }
     //Paddle Left-Top
     if(rightX.isBetween(paddleX, paddleX+paddleWidth) && rightY.isBetween(paddleY, paddleY+paddleHeight/2)){
         ballSpeedX = -Math.abs(ballSpeedX);
         ballSpeedY = -Math.abs(ballSpeedY);
-        return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};
+        updateBall({speedX: ballSpeedX, speedY: ballSpeedY});
+        return;
     }
     
     //Paddle Right-Top
     if(leftX.isBetween(paddleX, paddleX+paddleWidth) && leftY.isBetween(paddleY, paddleY+paddleHeight/2)){
         ballSpeedX = Math.abs(ballSpeedX);
         ballSpeedY = -Math.abs(ballSpeedY);
-        return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};
+        updateBall({speedX: ballSpeedX, speedY: ballSpeedY});
+        return;
     }
 
     //Paddle Left-Bottom
     if(rightX.isBetween(paddleX, paddleX+paddleWidth) && rightY.isBetween( paddleY+paddleHeight/2, paddleY+paddleHeight)){
         ballSpeedX = -Math.abs(ballSpeedX);
         ballSpeedY = Math.abs(ballSpeedY);
-        return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};
+        updateBall({speedX: ballSpeedX, speedY: ballSpeedY});
+        return;
     }
 
     //Paddle Right-Bottom
     if(leftX.isBetween(paddleX, paddleX+paddleWidth) && leftY.isBetween(paddleY+paddleHeight/2, paddleY+paddleHeight)){
         ballSpeedX = Math.abs(ballSpeedX)
         ballSpeedY = Math.abs(ballSpeedY)
-        return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};
+        updateBall({speedX: ballSpeedX, speedY: ballSpeedY});
+        return;
     }
 
 
@@ -286,7 +296,7 @@ const checkCollisions = ({ballData, paddleData, playBoardWidthPx, playBoardHeigh
             ballSpeedY = Math.abs(ballSpeedY);
             updateBall({speedY: ballSpeedY});
             handleBrickCollision(brick);
-            return {...getBall()};         
+            return;         
         }
 
         //Top hit
@@ -294,7 +304,7 @@ const checkCollisions = ({ballData, paddleData, playBoardWidthPx, playBoardHeigh
             ballSpeedY = -Math.abs(ballSpeedY);
             updateBall({speedY: ballSpeedY});
             handleBrickCollision(brick);
-            return {...getBall()};    
+            return;    
         }
 
         //Left hit
@@ -302,7 +312,7 @@ const checkCollisions = ({ballData, paddleData, playBoardWidthPx, playBoardHeigh
             ballSpeedX = -Math.abs(ballSpeedX);
             updateBall({speedX: ballSpeedX});
             handleBrickCollision(brick);
-            return {...getBall()};    
+            return;    
         }
 
         //Right hit
@@ -310,12 +320,9 @@ const checkCollisions = ({ballData, paddleData, playBoardWidthPx, playBoardHeigh
             ballSpeedX = Math.abs(ballSpeedX);
             updateBall({speedX: ballSpeedX});
             handleBrickCollision(brick);
-            return {...getBall()};  
+            return;  
         }
-    }   
-   
-    return {...ballData, left: ballX, top: ballY, speedX: ballSpeedX, speedY: ballSpeedY};
-
+    }
 }
 
 const ballIsOutHandler = () => {   
@@ -342,9 +349,7 @@ const ballIsOutHandler = () => {
         updateBall({...ballData});      
     }
 
-    renderMessage(getMessage());
-
-    return getBall();
+    renderMessage(getMessage());   
 }
 
 const handleBrickCollision = (brick) => {
