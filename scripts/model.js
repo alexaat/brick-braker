@@ -131,8 +131,7 @@ export const setScore = (val) => {
     score = val;
 };
 export const removeBlockFromModel = (id) => {
-    levels[level-1] = levels[level-1].filter(b => b.id !== id);
-    console.log(getBricks().length);
+    levels[level-1] = levels[level-1].filter(b => b.id !== id);   
 };
 export const updateBrick = (brick) => {
     levels[level-1] = [...levels[level-1].filter(b => b.id !== brick.id), brick];

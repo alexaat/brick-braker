@@ -70,9 +70,6 @@ const updateScreen = () => {
     let paddleData = getPaddle();
     const controlls = getControlls();
 
-
-    console.log(gameState)
-       
     //Update Paddle  
     if(gameState === gameStateReady || gameState === gameStateRunning){       
         if(controlls.isLeft === true){
@@ -177,7 +174,10 @@ export const handleKeyPress = (key) => {
             const ballData = getBall();
             updateBall({top: paddleData.top - ballData.size, visibility: true, speedX: defaultSpeedX, speedY: defaultSpeedY});
 
-            getBricks().forEach(b => removeBlockFromDOM(b.id));
+            getBricks().forEach(b => {
+                removeBlockFromModel(b.id);
+                removeBlockFromDOM(b.id);
+                });
 
             setLevel(1);
             renderLevel(getLevel());
@@ -191,6 +191,40 @@ export const handleKeyPress = (key) => {
 
             return;
         }
+        if(gameState === gameStateWin){
+    
+            setMessage(`Ready. Press SPACE to play`);
+            renderMessage(getMessage());
+            setScore(0);
+            renderScore(getScore());
+            setLevel(1);
+            renderLevel(getLevel());
+            setLives(3);
+            let bricks = getBricks();           
+            if(bricks){                
+                bricks.forEach(b =>{
+                    removeBlockFromModel(b.id);
+                    removeBlockFromDOM(b.id);
+                });              
+                    
+            }
+            const paddleData = getPaddle();
+            updatePaddle({left: (playBoardWidthPx - paddleData.width)/2, src: paddleImagesSource[getLives()-1]});
+            const ballData = getBall();
+            updateBall({top: paddleData.top - ballData.size, visibility: true, speedX: defaultSpeedX, speedY: defaultSpeedY});
+            setLevel(1);
+            renderLevel(getLevel());
+
+            resetLevels();
+            bricks = getBricks();
+
+            if(bricks){
+                bricks.forEach(brick => renderBlock(brick));
+            }    
+
+            setGameState(gameStateReady);
+
+        }
         
     }
     if(key === 'Escape'){
@@ -202,6 +236,7 @@ const checkCollisions = ({ballData, paddleData, playBoardWidthPx, playBoardHeigh
 
     const ballX = ballData.left + ballData.speedX;
     const ballY = ballData.top + ballData.speedY;
+    updateBall({left: ballX, top: ballY});
     let ballSpeedX = ballData.speedX;
     let ballSpeedY = ballData.speedY;
     const paddleX = paddleData.left;
@@ -217,7 +252,7 @@ const checkCollisions = ({ballData, paddleData, playBoardWidthPx, playBoardHeigh
     const rightX = ballX + ballSize;
     const rightY = ballY+ballSize/2;
     const leftX = ballX;
-    const leftY = ballY+ballSize/2;
+    const leftY = ballY+ballSize/2;    
 
     //Walls collisions
     //Left hit
@@ -237,8 +272,7 @@ const checkCollisions = ({ballData, paddleData, playBoardWidthPx, playBoardHeigh
     }
     if (ballY > playBoardHeightPx - ballSize){
         ballIsOutHandler();
-        return;
-        
+        return;        
     }  
 
     //Paddle collisions    
@@ -279,7 +313,6 @@ const checkCollisions = ({ballData, paddleData, playBoardWidthPx, playBoardHeigh
         updateBall({speedX: ballSpeedX, speedY: ballSpeedY});
         return;
     }
-
 
     //Brick Collisions
     const bricks = getBricks();
@@ -374,14 +407,17 @@ const handleBrickCollision = (brick) => {
         if(maxScore === score){
 
            //Set Next Level 
-           console.log(numberOfLevels)
             if(getLevel() + 1 > numberOfLevels){
                 setGameState(gameStateWin);
-                setMessage('You Win!!!');
+                setMessage('You Win!!! Press SPACE to play again');
                 renderMessage(getMessage());
-                console.log(getMessage());
             }else{
-                getBricks().forEach(b => removeBlockFromDOM(b.id));
+                getBricks().forEach(b =>
+                    {   
+                        removeBlockFromModel(b.id);
+                        removeBlockFromDOM(b.id);
+                    }                   
+                );
 
                 setLevel(getLevel() + 1);
                 const level = getLevel();
