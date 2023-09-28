@@ -229,6 +229,33 @@ export const handleKeyPress = (key) => {
     }
     if(key === 'Escape'){
 
+        setGameState(gameStateReady);
+            setMessage({title: 'Ready', body: 'Press SPACE to play'})
+            renderMessage(getMessage());
+          
+            setLives(3);
+
+            const paddleData = getPaddle();
+            updatePaddle({left: (playBoardWidthPx - paddleData.width)/2, src: paddleImagesSource[getLives()-1]});
+
+            const ballData = getBall();
+            updateBall({top: paddleData.top - ballData.size, visibility: true, speedX: defaultSpeedX, speedY: defaultSpeedY});
+
+            getBricks().forEach(b => {
+                removeBlockFromModel(b.id);
+                removeBlockFromDOM(b.id);
+                });
+
+            setLevel(1);
+            renderLevel(getLevel());
+
+            setScore(0);
+            renderScore(getScore());
+          
+            resetLevels();
+
+            getBricks().forEach(brick => renderBlock(brick));
+
     }
 }
 
@@ -420,7 +447,6 @@ const handleBrickCollision = (brick) => {
                         removeBlockFromDOM(b.id);
                     }                   
                 );
-
                 setLevel(getLevel() + 1);
                 const level = getLevel();
                 renderLevel(level);
@@ -437,8 +463,7 @@ const handleBrickCollision = (brick) => {
                 const bricks = getBricks();
                 if(bricks){
                     bricks.forEach(brick => renderBlock(brick));
-                }            
-    
+                }   
                 setGameState(gameStateReady);
             }
         }
