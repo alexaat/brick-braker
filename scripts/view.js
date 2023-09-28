@@ -1,7 +1,8 @@
 const scoreLable = document.querySelector('#score');
 const levelLable = document.querySelector('#level');
 const paddle = document.querySelector('#paddle');
-const message = document.querySelector('#message');
+const messageTitle = document.querySelector('#message #title');
+const messageBody = document.querySelector('#message #body');
 const playBoard = document.querySelector('#board');
 const ball = document.querySelector('#ball');
 
@@ -13,8 +14,13 @@ brickMap.set("yellow_brick", "url('../images/yellow_brick.jpg')");
 brickMap.set("red_brick", "url('../images/red_brick.jpg')");
 brickMap.set("green_brick", "url('../images/green_brick.jpg')");
 
-export const renderMessage = (text) => {
-    message.textContent = text;
+export const renderMessage = ({title, body}) => {
+    if(title !== undefined){
+        messageTitle.textContent = title;
+    }
+    if(body !== undefined){
+        messageBody.textContent = body;
+    }  
 }
 export const renderScore = (score) => {
     scoreLable.textContent = `Score: ${score}`;

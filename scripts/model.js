@@ -49,7 +49,8 @@ let ballSpeedX = defaultSpeedX;
 let ballSpeedY = defaultSpeedY;
 
 let score = 0;
-let message = '';
+let messageTitle = '';
+let messageBody = '';
 
 
 export const getWalls = () => {
@@ -139,11 +140,16 @@ export const updateBrick = (brick) => {
 export const setLives = (val) => {
     lives = val;
 };
-export const setMessage = (val) => {
-    message = val;
+export const setMessage = ({title, body}) => {
+    if(title !== undefined){
+        messageTitle = title;
+    }
+    if(body !== undefined){
+        messageBody = body;
+    }
 };
 export const getMessage = () => {
-    return message;
+    return {title: messageTitle, body: messageBody};
 };
 export const resetLevels = () => {
     levels = [level1, level2];

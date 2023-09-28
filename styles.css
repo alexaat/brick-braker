@@ -34,17 +34,30 @@
 }
 
 #message{
+    margin-top: 150px;
     position: absolute;
     width: 100%;
     text-align: center;
-    margin-top: 150px;
-    font-size: 2rem;
-    font-weight: 700;
-    color: #aaaaaa;
-    font-family:'Courier New', Courier, monospace;
     background-color: #222222dd;
     z-index: 1;
 }
+
+#message #title{
+    font-family:'Courier New', Courier, monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #aaaaaa;
+    background-color: #00000000;  
+}
+
+#message #body {
+    font-family:'Courier New', Courier, monospace;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #aaaaaa;
+    background-color: #00000000;
+}
+
 .brick{
     background-size: cover;
 }

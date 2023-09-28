@@ -150,20 +150,20 @@ export const handleKeyPress = (key) => {
 
         if(gameState === gameStateReady || gameState === gameStatePaused){
             setGameState(gameStateRunning);
-            setMessage('');
+            setMessage({title: '', body: ''});
             renderMessage(getMessage());
             return;
         }
         if(gameState === gameStateRunning){
             setGameState(gameStatePaused);
-            setMessage('Paused');
+            setMessage({title: 'Paused', body: 'Press SPACE to continue or ESC to restart'});
             renderMessage(getMessage());
             return;
         }
         if(gameState === gameStateGameOver){
             
             setGameState(gameStateReady);
-            setMessage('Press SPACE to play')
+            setMessage({title: 'Ready', body: 'Press SPACE to play'})
             renderMessage(getMessage());
           
             setLives(3);
@@ -193,7 +193,7 @@ export const handleKeyPress = (key) => {
         }
         if(gameState === gameStateWin){
     
-            setMessage(`Ready. Press SPACE to play`);
+            setMessage({title: 'Ready', body: 'Press SPACE to play'});
             renderMessage(getMessage());
             setScore(0);
             renderScore(getScore());
@@ -366,10 +366,12 @@ const ballIsOutHandler = () => {
         updateBall({visibility: false});
         renderBall({...getBall()});   
         setGameState(gameStateGameOver);
-        setMessage('Game Over. Press SPACE to play again');
+        setMessage({title: 'Game Over', body: 'Press SPACE to play again'});
     }else{        
         setGameState(gameStateReady);
-        setLives(lives - 1);      
+        setLives(lives - 1);   
+        
+        setMessage({title: 'Lost a life', body: 'Press SPACE to play'});
 
         let paddleData = getPaddle();
         paddleData.src = paddleImagesSource[getLives() - 1];
@@ -409,7 +411,7 @@ const handleBrickCollision = (brick) => {
            //Set Next Level 
             if(getLevel() + 1 > numberOfLevels){
                 setGameState(gameStateWin);
-                setMessage('You Win!!! Press SPACE to play again');
+                setMessage({title: 'You Win!!!', body: 'Press SPACE to play again'});
                 renderMessage(getMessage());
             }else{
                 getBricks().forEach(b =>
@@ -423,7 +425,7 @@ const handleBrickCollision = (brick) => {
                 const level = getLevel();
                 renderLevel(level);
     
-                setMessage('Press SPACE to play')
+                setMessage({title: 'Next Level', body: 'Press SPACE to play'});
                 renderMessage(getMessage());
     
                 const paddleData = getPaddle();
