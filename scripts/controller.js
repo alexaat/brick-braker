@@ -33,7 +33,9 @@ import { getWalls,
          setLevel,
          getLevel,
          getMaxScore,
-         numberOfLevels
+         numberOfLevels,
+         getPaddleMoveDirection,
+         setPaddleMoveDirection
         } from "./model.js";
 import {renderBlock, renderPlayBoard, renderPaddle, renderBall, renderMessage, removeBlockFromDOM, renderScore, renderLevel} from "./view.js";
 
@@ -75,13 +77,13 @@ const updateScreen = () => {
         if(controlls.isLeft === true){
             let paddleX = paddleData.left - paddleData.speedX;
             if(paddleX < 0) {
-                paddleX = 0;
+                paddleX = 0;               
             }
             updatePaddle({left: paddleX});   
         }else if (controlls.isRight === true){
             let paddleX = paddleData.left + paddleData.speedX;
             if(paddleX > playBoardWidthPx - paddleData.width){
-                paddleX = playBoardWidthPx - paddleData.width;
+                paddleX = playBoardWidthPx - paddleData.width;               
             }
             updatePaddle({left: paddleX});   
         }

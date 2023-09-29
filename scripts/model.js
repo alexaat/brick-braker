@@ -52,6 +52,9 @@ let score = 0;
 let messageTitle = '';
 let messageBody = '';
 
+let movingDirection = '';
+
+let prevPaddleLeft = 0;
 
 export const getWalls = () => {
     const walls = [];
@@ -78,13 +81,27 @@ export const getBall = () => {
 };
 export const setRightArrow = (val) => {
     isRightDown = val;
+    if (val === false){
+        setPaddleMoveDirection ('');
+    }
 };
 export const setLeftArrow = (val) => {
     isLeftDown = val;
+    if (val === false){
+        setPaddleMoveDirection ('');
+    }
 };
 export const updatePaddle = ({left, top, src}) => {
     if(left !== undefined){
         paddleX = left;
+        if(paddleX>prevPaddleLeft){
+            setPaddleMoveDirection('right')
+        }else if(paddleX<prevPaddleLeft){
+            setPaddleMoveDirection('left')
+        } else{
+            setPaddleMoveDirection('');
+        }
+        prevPaddleLeft = paddleX;
     }
     if(top !== undefined){
         paddleY = top;
@@ -167,4 +184,10 @@ export const getMaxScore = (level) => {
     });
 
     return cumulative[level-1];
+}
+export const setPaddleMoveDirection = (val) => {
+    movingDirection = val;
+}
+export const getPaddleMoveDirection = () => {
+    return movingDirection;
 }
