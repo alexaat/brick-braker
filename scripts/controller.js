@@ -7,7 +7,10 @@ import { ballSize,
          paddleImagesSource,
          defaultSpeedX,
          defaultSpeedY,
-         gameStateWin } from "./constants.js";
+         gameStateWin,
+         ballMinSpeedX, 
+         ballMinSpeedY,
+         moveingPaddleSpeedConst  } from "./constants.js";
 import { getWalls,
          playBoardHeightPx,
          playBoardWidthPx,
@@ -307,8 +310,43 @@ const checkCollisions = ({ballData, paddleData, playBoardWidthPx, playBoardHeigh
     //Paddle collisions    
     //Puddle top
     if(ballX.isBetween(paddleX, paddleX+paddleWidth) && ballY>paddleY-ballSize){
-        ballSpeedY = -Math.abs(ballSpeedY);
-        updateBall({speedY: ballSpeedY});
+        const paddleMoveDirection = getPaddleMoveDirection();
+        const vSq = ballSpeedX*ballSpeedX + ballSpeedY*ballSpeedY;
+        if(paddleMoveDirection === 'left'){
+            if(ballSpeedX>0){  
+                if(Math.abs(ballSpeedY*moveingPaddleSpeedConst) > ballMinSpeedY){
+                    ballSpeedY = -Math.abs(ballSpeedY)*moveingPaddleSpeedConst;
+                    ballSpeedX = Math.sqrt(vSq - ballSpeedY*ballSpeedY);
+                }else{
+                    ballSpeedY = -Math.abs(ballSpeedY);
+                }              
+            }else if(ballSpeedX<0){
+                if(Math.abs(ballSpeedX*moveingPaddleSpeedConst) > ballMinSpeedX){
+                    ballSpeedX = ballSpeedX*moveingPaddleSpeedConst;
+                    ballSpeedY= -Math.sqrt(vSq - ballSpeedX*ballSpeedX);
+                }else{
+                    ballSpeedY = -Math.abs(ballSpeedY);
+                }              
+            }        
+        }else if (paddleMoveDirection === 'right'){
+            if(ballSpeedX>0){
+                if(Math.abs(ballSpeedX*moveingPaddleSpeedConst) > ballMinSpeedX){
+                    ballSpeedX = ballSpeedX*moveingPaddleSpeedConst;
+                    ballSpeedY= -Math.sqrt(vSq - ballSpeedX*ballSpeedX);
+                }else{
+                    ballSpeedY = -Math.abs(ballSpeedY);
+                }             
+            }else if(ballSpeedX<0){
+                if(Math.abs(ballSpeedY*moveingPaddleSpeedConst) > ballMinSpeedY){
+                    ballSpeedY = -Math.abs(ballSpeedY)*moveingPaddleSpeedConst;
+                    ballSpeedX = -Math.sqrt(vSq - ballSpeedY*ballSpeedY);
+                }
+                ballSpeedY = -Math.abs(ballSpeedY);              
+            }
+        }else{
+            ballSpeedY = -Math.abs(ballSpeedY);
+        }        
+        updateBall({speedX: ballSpeedX, speedY: ballSpeedY});
         return;
     }
     //Paddle Left-Top

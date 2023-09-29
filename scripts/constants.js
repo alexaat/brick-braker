@@ -16,4 +16,8 @@ export const gameStateRunning = 'Running';
 export const gameStateGameOver = 'Game Over';
 export const gameStateWin = 'Win';
 
+export const ballMinSpeedX = 1;
+export const ballMinSpeedY = 1.9;
+export const moveingPaddleSpeedConst = 0.7;
+
 export const paddleImagesSource = ['paddle_0.jpg','paddle_1.jpg','paddle_2.jpg']; 
