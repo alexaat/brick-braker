@@ -56,6 +56,16 @@ let movingDirection = '';
 
 let prevPaddleLeft = 0;
 
+let elapsedSeconds = 0;
+
+export const setElapsedSeconds = (val) => {
+    elapsedSeconds = val;
+}
+
+export const getElapsedSeconds = () => {
+    return elapsedSeconds;
+}
+
 export const getWalls = () => {
     const walls = [];
     for (let i = 0; i < playBoardHeight; i++) {       

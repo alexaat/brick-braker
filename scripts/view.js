@@ -5,6 +5,7 @@ const messageTitle = document.querySelector('#message #title');
 const messageBody = document.querySelector('#message #body');
 const playBoard = document.querySelector('#board');
 const ball = document.querySelector('#ball');
+const time = document.querySelector('#time');
 
 const brickMap = new Map();
 brickMap.set("red_block", "url('../images/red_block.jpg')");
@@ -90,4 +91,17 @@ export const renderBlock = (block) => {
 
 export const removeBlockFromDOM = (id) => {
     document.getElementById(id).remove();
+}
+
+export const renderElapsedSeconds = (secs) => {
+
+    const hours = Math.floor(secs/3600);
+    const minutes = Math.floor((secs - hours*3600)/60);
+    const seconds = secs - hours*3600 - minutes*60;
+
+    const hoursStr = hours < 10 ? `0${hours}` : `${hours}`;    
+    const secondsStr = seconds < 10 ? `0${seconds}` : `${seconds}`;
+    const minutesStr = minutes < 10 ? `0${minutes}` : `${minutes}`;
+   
+    time.textContent = hoursStr + ':' + minutesStr + ':'+secondsStr;
 }

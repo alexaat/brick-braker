@@ -1,5 +1,4 @@
-export const level1 = [ 
-     
+export const level1 = [      
     {         
         id: 1,
         left: 0,
@@ -136,7 +135,8 @@ export const level1 = [
         height: 15,
         hits: 1,
         type: 'yellow_brick'
-    },    
+    },  
+    
     { 
         id: 16,
         left: 150,
@@ -196,6 +196,5 @@ export const level1 = [
         width: 25,
         height: 25,
         type: 'blue_block'
-     },
-    
+     },   
 ];

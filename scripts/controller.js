@@ -38,10 +38,12 @@ import { getWalls,
          getMaxScore,
          numberOfLevels,
          getPaddleMoveDirection,
-         setPaddleMoveDirection
+         setElapsedSeconds,
+         getElapsedSeconds
         } from "./model.js";
-import {renderBlock, renderPlayBoard, renderPaddle, renderBall, renderMessage, removeBlockFromDOM, renderScore, renderLevel} from "./view.js";
+import {renderBlock, renderPlayBoard, renderPaddle, renderBall, renderMessage, removeBlockFromDOM, renderScore, renderLevel, renderElapsedSeconds} from "./view.js";
 
+let interval = null;
 
 Number.prototype.isBetween = function(left, right){
     return this > left && this < right;
@@ -157,16 +159,20 @@ export const handleKeyPress = (key) => {
             setGameState(gameStateRunning);
             setMessage({title: '', body: ''});
             renderMessage(getMessage());
+            startTimer();
             return;
         }
         if(gameState === gameStateRunning){
             setGameState(gameStatePaused);
             setMessage({title: 'Paused', body: 'Press SPACE to continue or ESC to restart'});
             renderMessage(getMessage());
+            pauseTimer();
             return;
         }
         if(gameState === gameStateGameOver){
             
+            stopTimer();
+
             setGameState(gameStateReady);
             setMessage({title: 'Ready', body: 'Press SPACE to play'})
             renderMessage(getMessage());
@@ -198,6 +204,7 @@ export const handleKeyPress = (key) => {
         }
         if(gameState === gameStateWin){
     
+            stopTimer();
             setMessage({title: 'Ready', body: 'Press SPACE to play'});
             renderMessage(getMessage());
             setScore(0);
@@ -235,6 +242,8 @@ export const handleKeyPress = (key) => {
     if(key === 'Escape'){
 
         setGameState(gameStateReady);
+        stopTimer();
+
             setMessage({title: 'Ready', body: 'Press SPACE to play'})
             renderMessage(getMessage());
           
@@ -425,8 +434,10 @@ const checkCollisions = ({ballData, paddleData, playBoardWidthPx, playBoardHeigh
     }
 }
 
-const ballIsOutHandler = () => {   
+const ballIsOutHandler = () => {    
     
+    pauseTimer();
+
     const lives = getLives();
     if(lives < 2){        
         //Game Over
@@ -475,6 +486,7 @@ const handleBrickCollision = (brick) => {
 
         if(maxScore === score){
 
+            pauseTimer();
            //Set Next Level 
             if(getLevel() + 1 > numberOfLevels){
                 setGameState(gameStateWin);
@@ -509,5 +521,29 @@ const handleBrickCollision = (brick) => {
         }
     }
 }
+
+const startTimer = () => {
+    if(interval) return;
+    interval = setInterval(() => {
+        const seconds = getElapsedSeconds();
+        setElapsedSeconds(seconds + 1);
+        renderElapsedSeconds(seconds + 1);
+    },1000);
+}
+
+const pauseTimer = () => {
+    clearInterval(interval);
+    interval = null;
+    const seconds = getElapsedSeconds();
+    renderElapsedSeconds(seconds);
+}
+
+const stopTimer = () => {
+    setElapsedSeconds(0);
+    clearInterval(interval);
+    interval = null;
+    const seconds = getElapsedSeconds();
+    renderElapsedSeconds(seconds);
+} 
 
 startGame();
