@@ -197,6 +197,4 @@ export const level1 = [
         height: 25,
         type: 'blue_block'
     },
-
-
 ];

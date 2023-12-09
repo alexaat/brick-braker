@@ -1,7 +1,5 @@
 export const level3 = [
 
-    //Level3
-
     //1
     {
         id: 1,
