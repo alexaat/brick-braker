@@ -456,7 +456,7 @@ export const level3 = [
     },
     {
         id: 52,
-        left: 49,
+        left: 50,
         top: 300,
         width: 25,
         height: 25,
@@ -464,7 +464,7 @@ export const level3 = [
     },
     {
         id: 53,
-        left: 73,
+        left: 75,
         top: 315,
         width: 25,
         height: 25,
@@ -472,7 +472,7 @@ export const level3 = [
     },
     {
         id: 54,
-        left: 97,
+        left: 100,
         top: 300,
         width: 25,
         height: 25,
@@ -489,7 +489,7 @@ export const level3 = [
     },
     {
         id: 57,
-        left: 226,
+        left: 225,
         top: 315,
         width: 25,
         height: 25,
@@ -497,7 +497,7 @@ export const level3 = [
     },
     {
         id: 58,
-        left: 202,
+        left: 200,
         top: 300,
         width: 25,
         height: 25,
@@ -505,12 +505,10 @@ export const level3 = [
     },
     {
         id: 59,
-        left: 178,
+        left: 175,
         top: 315,
         width: 25,
         height: 25,
         type: 'blue_block'
     },
-
-
 ];

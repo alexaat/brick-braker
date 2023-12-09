@@ -126,7 +126,6 @@ export const level1 = [
         hits: 1,
         type: 'yellow_brick'
     },
-
     {
         id: 15,
         left: 100,
@@ -164,7 +163,6 @@ export const level1 = [
         hits: 1,
         type: 'yellow_brick'
     },
-
     {
         id: 19,
         left: 60,
