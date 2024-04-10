@@ -81,7 +81,8 @@ export const level2 = [
         height: 15,
         hits: 1,
         type: 'yellow_brick'
-    },
+    }
+    ,
     {
         id: 10,
         left: 25,
@@ -162,9 +163,5 @@ export const level2 = [
         height: 25,
         type: 'blue_block'
     },
-
-
-
-
 
 ]

@@ -1,11 +1,11 @@
-*{
+* {
     padding: 0;
     margin: 0;
     background-color: black;
     color: white;
 }
 
-#board{
+#board {
     position: relative;
     margin: auto;
     margin-top: 80px;
@@ -14,26 +14,26 @@
 .block {
     position: absolute;
     background-size: cover;
-    }
+}
 
-#paddle{
-    position: absolute; 
+#paddle {
+    position: absolute;
     background-size: cover;
     width: 0;
     height: 0;
 }
 
-#paddle img{
+#paddle img {
     width: 100%;
     height: 100%;
 }
 
-#ball{
+#ball {
     position: absolute;
     background-image: url("images/ball.svg");
 }
 
-#message{
+#message {
     margin-top: 150px;
     position: absolute;
     width: 100%;
@@ -43,38 +43,107 @@
     border-radius: 16px;
 }
 
-#message #title{
-    font-family:'Courier New', Courier, monospace;
+#message #title {
+    font-family: 'Courier New', Courier, monospace;
     font-size: 2rem;
     font-weight: 700;
     color: #aaaaaa;
-    background-color: #00000000;  
+    background-color: #00000000;
 }
 
 #message #body {
-    font-family:'Courier New', Courier, monospace;
+    font-family: 'Courier New', Courier, monospace;
     font-size: 1.5rem;
     font-weight: 600;
     color: #aaaaaa;
     background-color: #00000000;
 }
 
-.brick{
+.brick {
     background-size: cover;
 }
 
-.header{
+.header {
     display: flex;
     justify-content: space-between;
     width: 500px;
     margin: auto;
     margin-top: 36px;
-  
+
 }
 
 .header div {
     font-size: 24px;
-    font-family:'Courier New', Courier, monospace;
+    font-family: 'Courier New', Courier, monospace;
     font-weight: 700;
-    color: #aaaaaa;    
+    color: #aaaaaa;
+}
+
+/*Scores Table*/
+
+.scores-frame {
+    position: absolute;
+    width: 400px;
+    height: 600px;
+    background: #000000;
+    top: 90px;
+    left: calc(50% - 200px);
+    z-index: 1;
+}
+
+.block {
+    background: url('images/blue_block.jpeg');
+    background-size: cover;
+    width: 25px;
+    height: 25px;
+}
+
+.scores-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #aaaaaa;
+    margin-top: 32px;
+    text-align: center;
+    width: 100%;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.scores-header {
+    width: calc(100% - 60px);
+    margin-left: 25px;
+    display: flex;
+    flex-direction: row;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.scores-title-column {
+    font-size: 16px;
+    font-weight: 700;
+    color: #aaaaaa;
+    text-align: left;
+    padding-left: 8px;
+}
+
+.scores-container {
+    width: 100%;
+}
+
+.score-page-container {
+    display: flex;
+    position: absolute;
+    bottom: 32px;
+    margin-left: 50%;
+}
+
+.score-board-message {
+    position: absolute;
+    bottom: -96px;
+    text-align: center;
+    width: 100%;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #aaaaaa;
+
 }

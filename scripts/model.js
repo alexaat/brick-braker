@@ -61,6 +61,36 @@ let prevPaddleLeft = 0;
 
 let elapsedSeconds = 0;
 
+let page = 1;
+
+let isLastPage = false;
+
+let dataLoading = false;
+
+export const getDataLoading = () => {
+    return dataLoading;
+}
+
+export const setDataLoading = (_dataLoading) => {
+    dataLoading = _dataLoading;
+}
+
+export const setIsLastPage = (_lastPage) => {
+    isLastPage = _lastPage;
+}
+
+export const getIsLastPage = () => {
+    return isLastPage;
+}
+
+export const getPage = () => {
+    return page;
+}
+
+export const setPage = (_page) => {
+    page = _page
+}
+
 export const setElapsedSeconds = (val) => {
     elapsedSeconds = val;
 }

@@ -11,7 +11,12 @@ import {
     gameStateWin,
     ballMinSpeedX,
     ballMinSpeedY,
-    moveingPaddleSpeedConst
+    moveingPaddleSpeedConst,
+    allowedCharacters,
+    gameStatePlayerNameRequest,
+    gameStateDisplayScoresBoard,
+    maxItemsPerPage,
+    maxNameLength
 } from "./constants.js";
 import {
     getWalls,
@@ -42,11 +47,22 @@ import {
     numberOfLevels,
     getPaddleMoveDirection,
     setElapsedSeconds,
-    getElapsedSeconds
+    getElapsedSeconds,
+    getPage,
+    setPage,
+    setIsLastPage,
+    getIsLastPage,
+    setDataLoading,
+    getDataLoading
 } from "./model.js";
-import { renderBlock, renderPlayBoard, renderPaddle, renderBall, renderMessage, removeBlockFromDOM, renderScore, renderLevel, renderElapsedSeconds } from "./view.js";
+import { renderBlock, renderPlayBoard, renderPaddle, renderBall, renderMessage, removeBlockFromDOM, renderScore, renderLevel, renderElapsedSeconds, renderScoresFrame, removeScoresFrame, renderScores } from "./view.js";
+import { fetchRank, fetchScores, uploadScore } from "./network.js";
 
 let interval = null;
+
+let dataLoadingStatus = null;
+
+let cursorCounter = 0;
 
 Number.prototype.isBetween = function (left, right) {
     return this > left && this < right;
@@ -76,6 +92,96 @@ const setUp = () => {
 const updateScreen = () => {
 
     const gameState = getGameState();
+
+    if (gameState === gameStatePlayerNameRequest) {
+
+        //Make Cursor
+        cursorCounter++;
+        const el = document.querySelector('.input-name');
+        if (el && el.textContent.length < maxNameLength) {
+            const content = el.textContent;
+            if (cursorCounter === 1) {
+                el.textContent = el.textContent.slice(0, -1);
+                el.textContent += ' ';
+            }
+            if (cursorCounter === 25) {
+                el.textContent = el.textContent.slice(0, -1);
+                el.textContent += '_';
+            }
+            if (cursorCounter > 50) {
+                cursorCounter = 0;
+            }
+        }
+
+
+        if (dataLoadingStatus === null) {
+            dataLoadingStatus = 'load';
+            renderScoresFrame();
+
+            const score = getScore();
+            const time = getElapsedSeconds();
+
+            fetchRank(score, time)
+                .then(resp => resp.json())
+                .then(data => {
+                    if (data.message && data.message.includes('error')) {
+                        alert(data.message);
+                    } else {
+                        const rank = data.rank;
+                        const page = Math.ceil(data.rank / maxItemsPerPage);
+                        fetchScores(page)
+                            .then(resp => resp.json())
+                            .then(data => {
+
+                                if (data.message && data.message.includes('error')) {
+                                    alert(data.message);
+                                } else {
+                                    const isLastPage = data.is_last_page;
+                                    const page = data.page;
+                                    const items = data.payload;
+                                    const total = data.total;
+                                    setPage(page);
+
+                                    if (items.length === 0) {
+                                        items.push({ rank, name: '', time, score })
+                                    } else {
+                                        items.splice(rank - 1, 0, { rank, name: '', score, time });
+                                        if (items.length > maxItemsPerPage) {
+                                            items.pop();
+                                        }
+                                    }
+                                    renderScores(items, page, isLastPage, rank, 'Enter you name and press Enter. Use Escape key to cancel');
+                                }
+                            })
+                    }
+                })
+        }
+        return;
+    }
+
+    if (gameState === gameStateDisplayScoresBoard) {
+        if (dataLoadingStatus === null) {
+            dataLoadingStatus = 'load';
+            fetchScores(getPage())
+                .then(resp => resp.json())
+                .then(data => {
+                    if (data.message && data.message.includes('error')) {
+                        alert(data.message);
+                    } else {
+                        const isLastPage = data.is_last_page;
+                        setIsLastPage(isLastPage);
+                        const page = data.page;
+                        const items = data.payload;
+                        const total = data.total;
+                        renderScores(items, page, isLastPage, undefined, 'Use left or right arrows for different pages. Press any other key to continue');
+                    }
+                    setDataLoading(false);
+                });
+
+        }
+        return;
+    }
+
     let ballData = getBall();
     let paddleData = getPaddle();
     const controlls = getControlls();
@@ -131,12 +237,8 @@ const initControlls = () => {
             setLeftArrow(true);
         }
 
-        if (e.key === ' ') {
-            handleKeyPress(' ');
-        }
-        if (e.key === 'Escape') {
-            handleKeyPress('Escape');
-        }
+        handleKeyPress(e.key);
+
     });
 
     document.addEventListener("keyup", (e) => {
@@ -154,127 +256,196 @@ const initControlls = () => {
 }
 
 export const handleKeyPress = (key) => {
-    if (key === ' ') {
+    const gameState = getGameState();
 
-        const gameState = getGameState();
+    switch (gameState) {
+        case gameStateReady:
+            if (key === ' ') {
+                setGameState(gameStateRunning);
+                setMessage({ title: '', body: '' });
+                renderMessage(getMessage());
+                startTimer();
+            }
 
-        if (gameState === gameStateReady || gameState === gameStatePaused) {
-            setGameState(gameStateRunning);
-            setMessage({ title: '', body: '' });
-            renderMessage(getMessage());
-            startTimer();
-            return;
-        }
-        if (gameState === gameStateRunning) {
-            setGameState(gameStatePaused);
-            setMessage({ title: 'Paused', body: 'Press SPACE to continue or ESC to restart' });
-            renderMessage(getMessage());
-            pauseTimer();
-            return;
-        }
-        if (gameState === gameStateGameOver) {
+            if (key === 'Escape') {
+                resetGame();
+            }
 
-            stopTimer();
+            break;
 
-            setGameState(gameStateReady);
-            setMessage({ title: 'Ready', body: 'Press SPACE to play' })
-            renderMessage(getMessage());
+        case gameStatePaused:
+            if (key === ' ') {
+                setGameState(gameStateRunning);
+                setMessage({ title: '', body: '' });
+                renderMessage(getMessage());
+                startTimer();
+            }
+            if (key === 'Escape') {
+                resetGame();
+            }
 
-            setLives(3);
+            break;
 
-            const paddleData = getPaddle();
-            updatePaddle({ left: (playBoardWidthPx - paddleData.width) / 2, src: paddleImagesSource[getLives() - 1] });
+        case gameStateRunning:
+            if (key === ' ') {
+                setGameState(gameStatePaused);
+                setMessage({ title: 'Paused', body: 'Press SPACE to continue or ESC to restart' });
+                renderMessage(getMessage());
+                pauseTimer();
+            }
+            if (key === 'Escape') {
+                resetGame();
+            }
+            break;
 
-            const ballData = getBall();
-            updateBall({ top: paddleData.top - ballData.size, visibility: true, speedX: defaultSpeedX, speedY: defaultSpeedY });
+        case gameStateGameOver:
+            if (key === ' ') {
+                stopTimer();
 
-            getBricks().forEach(b => {
-                removeBlockFromModel(b.id);
-                removeBlockFromDOM(b.id);
-            });
+                setGameState(gameStateReady);
+                setMessage({ title: 'Ready', body: 'Press SPACE to play' })
+                renderMessage(getMessage());
 
-            setLevel(1);
-            renderLevel(getLevel());
+                setLives(3);
 
-            setScore(0);
-            renderScore(getScore());
+                const paddleData = getPaddle();
+                updatePaddle({ left: (playBoardWidthPx - paddleData.width) / 2, src: paddleImagesSource[getLives() - 1] });
 
-            resetLevels();
+                const ballData = getBall();
+                updateBall({ top: paddleData.top - ballData.size, visibility: true, speedX: defaultSpeedX, speedY: defaultSpeedY });
 
-            getBricks().forEach(brick => renderBlock(brick));
-
-            return;
-        }
-        if (gameState === gameStateWin) {
-
-            stopTimer();
-            setMessage({ title: 'Ready', body: 'Press SPACE to play' });
-            renderMessage(getMessage());
-            setScore(0);
-            renderScore(getScore());
-            setLives(3);
-
-            let bricks = getBricks();
-            if (bricks) {
-                bricks.forEach(b => {
+                getBricks().forEach(b => {
                     removeBlockFromModel(b.id);
                     removeBlockFromDOM(b.id);
                 });
 
+                setLevel(1);
+                renderLevel(getLevel());
+
+                setScore(0);
+                renderScore(getScore());
+
+                resetLevels();
+
+                getBricks().forEach(brick => renderBlock(brick));
             }
-            setLevel(1);
-            renderLevel(getLevel());
-
-            const paddleData = getPaddle();
-            updatePaddle({ left: (playBoardWidthPx - paddleData.width) / 2, src: paddleImagesSource[getLives() - 1] });
-            const ballData = getBall();
-            updateBall({ top: paddleData.top - ballData.size, visibility: true, speedX: defaultSpeedX, speedY: defaultSpeedY });
-            setLevel(1);
-            renderLevel(getLevel());
-
-            resetLevels();
-            bricks = getBricks();
-
-            if (bricks) {
-                bricks.forEach(brick => renderBlock(brick));
+            if (key === 'Escape') {
+                resetGame();
             }
 
-            setGameState(gameStateReady);
+            break;
 
-        }
+        case gameStateWin:
+            if (key === ' ') {
+                stopTimer();
+                setMessage({ title: 'Ready', body: 'Press SPACE to play' });
+                renderMessage(getMessage());
+                setScore(0);
+                renderScore(getScore());
+                setLives(3);
 
-    }
-    if (key === 'Escape') {
+                let bricks = getBricks();
+                if (bricks) {
+                    bricks.forEach(b => {
+                        removeBlockFromModel(b.id);
+                        removeBlockFromDOM(b.id);
+                    });
 
-        setGameState(gameStateReady);
-        stopTimer();
+                }
+                setLevel(1);
+                renderLevel(getLevel());
 
-        setMessage({ title: 'Ready', body: 'Press SPACE to play' })
-        renderMessage(getMessage());
+                const paddleData = getPaddle();
+                updatePaddle({ left: (playBoardWidthPx - paddleData.width) / 2, src: paddleImagesSource[getLives() - 1] });
+                const ballData = getBall();
+                updateBall({ top: paddleData.top - ballData.size, visibility: true, speedX: defaultSpeedX, speedY: defaultSpeedY });
+                setLevel(1);
+                renderLevel(getLevel());
 
-        setLives(3);
+                resetLevels();
+                bricks = getBricks();
 
-        const paddleData = getPaddle();
-        updatePaddle({ left: (playBoardWidthPx - paddleData.width) / 2, src: paddleImagesSource[getLives() - 1] });
+                if (bricks) {
+                    bricks.forEach(brick => renderBlock(brick));
+                }
 
-        const ballData = getBall();
-        updateBall({ top: paddleData.top - ballData.size, visibility: true, speedX: defaultSpeedX, speedY: defaultSpeedY });
+                setGameState(gameStateReady);
+            }
+            if (key === 'Escape') {
+                resetGame();
+            }
 
-        getBricks().forEach(b => {
-            removeBlockFromModel(b.id);
-            removeBlockFromDOM(b.id);
-        });
+            break;
 
-        setLevel(1);
-        renderLevel(getLevel());
+        case gameStatePlayerNameRequest:
+            if (allowedCharacters.includes(key)) {
+                //User player name
+                const inputName = document.querySelector('.input-name');
+                if (key === 'Backspace') {
+                    inputName.textContent = inputName.textContent.slice(0, -1);
+                } else {
+                    if (inputName.textContent.length < maxNameLength) {
+                        //inputName.textContent += key;
+                        inputName.textContent = inputName.textContent.slice(0, -1) + key + ' ';
 
-        setScore(0);
-        renderScore(getScore());
+                    }
 
-        resetLevels();
+                }
 
-        getBricks().forEach(brick => renderBlock(brick));
+            }
+            if (key === 'Enter') {
+                const inputName = document.querySelector('.input-name');
+                const score = getScore();
+                const time = getElapsedSeconds();
 
+                if (inputName) {
+                    let content = inputName.textContent;
+                    if (content.charAt(content.length - 1) === '_' || content.charAt(content.length - 1) === ' ') {
+                        content = content.slice(0, -1);
+                    }
+                    const name = content.trim();
+                    if (name != '') {
+                        uploadScore(name, score, time).then(() => {
+                            dataLoadingStatus = null;
+                            setGameState(gameStateDisplayScoresBoard);
+                        });
+                    }
+                }
+
+            }
+            if (key === 'Escape') {
+                //Player wants to skip name save
+                dataLoadingStatus = null;
+                setGameState(gameStateDisplayScoresBoard);
+            }
+            break;
+
+        case gameStateDisplayScoresBoard:
+            if (key === 'ArrowLeft') {
+                //Previous Page                
+                if (!getDataLoading()) {
+                    const page = getPage();
+                    if (page > 1) {
+                        setPage(page - 1);
+                        dataLoadingStatus = null;
+                    }
+                }
+            } else if (key === 'ArrowRight') {
+                if (!getDataLoading()) {
+                    const page = getPage();
+                    const isLastPage = getIsLastPage();
+                    if (!isLastPage) {
+                        setPage(page + 1);
+                        dataLoadingStatus = null;
+                    }
+                }
+
+            } else {
+                //Go to ready state
+                removeScoresFrame();
+                resetGame();
+            }
+            break;
     }
 }
 
@@ -448,7 +619,8 @@ const ballIsOutHandler = () => {
         //Game Over
         updateBall({ visibility: false });
         renderBall({ ...getBall() });
-        setGameState(gameStateGameOver);
+        //setGameState(gameStateGameOver);
+        setGameState(gameStatePlayerNameRequest);
         setMessage({ title: 'Game Over', body: 'Press SPACE to play again' });
     } else {
         setGameState(gameStateReady);
@@ -494,9 +666,10 @@ const handleBrickCollision = (brick) => {
             pauseTimer();
             //Set Next Level 
             if (getLevel() + 1 > numberOfLevels) {
-                setGameState(gameStateWin);
-                setMessage({ title: 'You Win!!!', body: 'Press SPACE to play again' });
-                renderMessage(getMessage());
+                setGameState(gameStatePlayerNameRequest);
+                //setGameState(gameStateWin);
+                //setMessage({ title: 'You Win!!!', body: 'Press SPACE to play again' });
+                //renderMessage(getMessage());
             } else {
                 getBricks().forEach(b => {
                     removeBlockFromModel(b.id);
@@ -548,6 +721,40 @@ const stopTimer = () => {
     interval = null;
     const seconds = getElapsedSeconds();
     renderElapsedSeconds(seconds);
+}
+
+const resetGame = () => {
+    dataLoadingStatus = null;
+    setDataLoading(false);
+
+    setGameState(gameStateReady);
+    stopTimer();
+
+    setMessage({ title: 'Ready', body: 'Press SPACE to play' })
+    renderMessage(getMessage());
+
+    setLives(3);
+
+    const paddleData = getPaddle();
+    updatePaddle({ left: (playBoardWidthPx - paddleData.width) / 2, src: paddleImagesSource[getLives() - 1] });
+
+    const ballData = getBall();
+    updateBall({ top: paddleData.top - ballData.size, visibility: true, speedX: defaultSpeedX, speedY: defaultSpeedY });
+
+    getBricks().forEach(b => {
+        removeBlockFromModel(b.id);
+        removeBlockFromDOM(b.id);
+    });
+
+    setLevel(1);
+    renderLevel(getLevel());
+
+    setScore(0);
+    renderScore(getScore());
+
+    resetLevels();
+
+    getBricks().forEach(brick => renderBlock(brick));
 }
 
 startGame();

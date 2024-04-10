@@ -15,9 +15,17 @@ export const gameStatePaused = 'Paused';
 export const gameStateRunning = 'Running';
 export const gameStateGameOver = 'Game Over';
 export const gameStateWin = 'Win';
+export const gameStatePlayerNameRequest = 'Player Name Request';
+export const gameStateDisplayScoresBoard = 'Display Scores Board';
 
 export const ballMinSpeedX = 1;
 export const ballMinSpeedY = 1.9;
 export const moveingPaddleSpeedConst = 0.7;
 
-export const paddleImagesSource = ['paddle_0.jpg','paddle_1.jpg','paddle_2.jpg']; 
+export const paddleImagesSource = ['paddle_0.jpg', 'paddle_1.jpg', 'paddle_2.jpg'];
+
+export const allowedCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 -Backspace';
+
+export const endpoint = 'http://localhost:8080';
+export const maxItemsPerPage = 23;
+export const maxNameLength = 12;

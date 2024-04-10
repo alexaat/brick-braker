@@ -134,8 +134,8 @@ export const level1 = [
         height: 15,
         hits: 1,
         type: 'yellow_brick'
-    },
-
+    }
+    ,
     {
         id: 16,
         left: 150,
