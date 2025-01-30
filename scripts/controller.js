@@ -64,6 +64,9 @@ let dataLoadingStatus = null;
 
 let cursorCounter = 0;
 
+let iX;
+let iY;
+
 Number.prototype.isBetween = function (left, right) {
     return this > left && this < right;
 };
@@ -251,6 +254,26 @@ const initControlls = () => {
         if (e.key === 'ArrowLeft') {
             setLeftArrow(false);
         }
+    });
+
+    window.addEventListener('touchstart', (e) => {
+        const touchLocation = e.targetTouches[0]; 
+        iX = touchLocation.pageX;
+        iY = touchLocation.pageY; 
+    });
+
+    window.addEventListener('touchmove', (e) => {  
+        iX = undefined;
+        iY = undefined;
+    });
+
+    window.addEventListener('touchend', (e) => { 
+        if(iX && iY){
+
+            handleKeyPress(' ');
+            iX = undefined;
+            iY = undefined;            
+        } 
     });
 
 }
