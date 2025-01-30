@@ -443,9 +443,7 @@ export const handleKeyPress = (key) => {
                     if (inputName.textContent.length < maxNameLength) {
                         //inputName.textContent += key;
                         inputName.textContent = inputName.textContent.slice(0, -1) + key + ' ';
-
                     }
-
                 }
 
             }

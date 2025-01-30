@@ -183,12 +183,6 @@ export const renderScoresFrame = () => {
 
     document.body.appendChild(scoresFrame);
 
-    let dummy = document.querySelector(".dummy");
-   
-    dummy.focus();
-    dummy.click();
-
-
 }
 
 export const removeScoresFrame = () => {
