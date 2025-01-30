@@ -75,7 +75,8 @@ export const renderBall = ({ left, top, size, visibility }) => {
 export const renderPlayBoard = (width, height) => {
     playBoard.style.width = `${width}px`;
     playBoard.style.height = `${height}px`; 
-    playBoard.style.left = `calc((100% - ${width}px)/2 + ${blockSize}px)`;
+    let w = window.innerWidth;
+    playBoard.style.left = `calc((${w}px - ${width}px)/2 + ${blockSize}px)`;
 }
 
 export const renderBlock = (block) => {
@@ -116,7 +117,10 @@ export const renderScoresFrame = () => {
         return;
     }
     scoresFrame = document.createElement('div');
-    scoresFrame.classList.add('scores-frame');
+    scoresFrame.classList.add('scores-frame'); 
+    let w = window.innerWidth;
+    scoresFrame.style.left = `calc((${w}px - 400px)/2 + ${blockSize}px)`;
+
     //Draw bricks border left wall
     for (let i = 0; i < 24; i++) {
         const brick = document.createElement('div');
@@ -177,8 +181,14 @@ export const renderScoresFrame = () => {
     scoresContainer.classList.add('scores-container');
     scoresFrame.appendChild(scoresContainer);
 
-
     document.body.appendChild(scoresFrame);
+
+    let dummy = document.querySelector(".dummy");
+   
+    dummy.focus();
+    dummy.click();
+
+
 }
 
 export const removeScoresFrame = () => {

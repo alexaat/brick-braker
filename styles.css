@@ -87,8 +87,8 @@
     height: 600px;
     background: #000000;
     top: 90px;
-    left: calc(50% - 200px);
-    z-index: 1;
+    /* left: calc(50% - 200px + 25px); */
+    /* z-index: 1; */
 }
 
 .block {
@@ -145,5 +145,9 @@
     font-size: 1.3rem;
     font-weight: 600;
     color: #aaaaaa;
+}
 
+.dummy{
+    position: absolute;
+    top: -50px;
 }
