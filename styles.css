@@ -7,13 +7,12 @@
 
 #board {
     position: relative;
-    margin: auto;
-    margin-top: 80px;
+    margin-top: 80px;   
 }
 
 .block {
     position: absolute;
-    background-size: cover;
+    background-size: cover;  
 }
 
 #paddle {
@@ -61,7 +60,7 @@
 }
 
 .brick {
-    background-size: cover;
+    background-size: cover;   
 }
 
 .header {

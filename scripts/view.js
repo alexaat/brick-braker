@@ -1,4 +1,5 @@
 import { maxItemsPerPage } from './constants.js';
+import { blockSize } from './constants.js';
 
 const scoreLable = document.querySelector('#score');
 const levelLable = document.querySelector('#level');
@@ -73,7 +74,8 @@ export const renderBall = ({ left, top, size, visibility }) => {
 
 export const renderPlayBoard = (width, height) => {
     playBoard.style.width = `${width}px`;
-    playBoard.style.height = `${height}px`;
+    playBoard.style.height = `${height}px`; 
+    playBoard.style.left = `calc((100% - ${width}px)/2 + ${blockSize}px)`;
 }
 
 export const renderBlock = (block) => {

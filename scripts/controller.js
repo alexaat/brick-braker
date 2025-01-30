@@ -64,8 +64,11 @@ let dataLoadingStatus = null;
 
 let cursorCounter = 0;
 
+//Mobile controls
 let iX;
 let iY;
+let fingerTouch = 0;
+let initialPaddlePosition = 0;
 
 Number.prototype.isBetween = function (left, right) {
     return this > left && this < right;
@@ -74,7 +77,9 @@ Number.prototype.isBetween = function (left, right) {
 const setUp = () => {
 
     renderPlayBoard(playBoardWidthPx, playBoardHeightPx);
+
     const walls = getWalls();
+
     walls.forEach(block => {
         renderBlock(block);
     });
@@ -90,6 +95,8 @@ const setUp = () => {
 
     const bricks = getBricks();
     bricks.forEach(brick => renderBlock(brick));
+
+   
 }
 
 const updateScreen = () => {
@@ -260,9 +267,33 @@ const initControlls = () => {
         const touchLocation = e.targetTouches[0]; 
         iX = touchLocation.pageX;
         iY = touchLocation.pageY; 
+
+        initialPaddlePosition = getPaddle().left;
+        fingerTouch = iX;
     });
 
-    window.addEventListener('touchmove', (e) => {  
+    window.addEventListener('touchmove', (e) => {
+        if(getGameState() == gameStatePaused){
+            return;
+        }
+        e.preventDefault();
+
+        const x =  e.touches[0].clientX;        
+        const newX = initialPaddlePosition + (x - fingerTouch);
+
+        const paddleWidth = getPaddle().width;    
+
+      
+        if (newX > playBoardWidthPx - paddleWidth){
+            newX =  playBoardWidthPx - paddleWidth;
+        }
+
+        if(newX<0){
+            newX = 0;
+        }
+
+        updatePaddle({left: newX});
+
         iX = undefined;
         iY = undefined;
     });
@@ -274,6 +305,8 @@ const initControlls = () => {
             iX = undefined;
             iY = undefined;            
         } 
+        setLeftArrow(false);
+        setRightArrow(false);
     });
 
 }
